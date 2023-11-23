@@ -13,17 +13,17 @@ rooms = {}
 
 def newRoom(data):
     userID = data['userID']
-    room_id = str(random.randint(100000, 999999))  # 生成六位随机数字作为房间ID
-    rooms['room2'] = {
+    roomID = str(random.randint(100000, 999999))  # 生成六位随机数字作为房间ID
+    rooms[roomID] = {
     'players': 1,
     'player1':userID,
     'player2':'',
-    'room_id':room_id,
+    'room_id':roomID,
     'board': [[0 for _ in range(15)] for _ in range(15)]
     }
-    emit('room_created', {'room_id': room_id}, broadcast=True)
+    emit('room_created', {'room_id': roomID}, broadcast=True)
 
-@socketio.on('join')
+@socketio.on('joinRoom')
 def on_join(data):
     username = data['username']
     room_id = data['room_id']
@@ -34,7 +34,7 @@ def on_join(data):
     else:
         emit('full_room', room=room_id)
 
-@socketio.on('leave')
+@socketio.on('leaveRoom')
 def on_leave(data):
     username = data['username']
     room_id = data['room_id']
