@@ -1,0 +1,45 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 1px rgba(0, 0, 0.5);
+}
+
+.roomList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: lefl;
+}
+
+.roomItem {
+    padding: 10px;
+    box-shadow: 0 0 1px rgba(0, 0, 0.5);
+    margin-left: 10px;
+    width: 23%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+.roomItem:active{
+    background-color: #e5e5e5;
+}
+.roomIDBox{
+    display: flex;
+    flex-direction: row;
+}
+.userList{
+    display: flex;
+    flex-direction: column;
+}
+.userBox{
+    display: flex;
+    flex-direction: row; 
+}

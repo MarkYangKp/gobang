@@ -1,0 +1,49 @@
+body{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+#main{
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 1px rgba(0,0,0.5); 
+
+}
+.modelText{
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+}
+.modelBox{
+    margin: 10px;
+    
+    
+}
+#pvpBut{
+
+}
+#pveBut{
+
+}
+.Butt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 300px;
+    background-color: #e5e5e5;
+    border-radius: 20px;
+    box-shadow: 0 0 2px rgba(0,0,0.5);
+}
+.Butt:hover{
+    
+}
+.Butt:active{
+    height: 60px;
+    width: 310px;
+    background-color: #e5e5e5;
+    border-radius: 20px;
+    box-shadow: 0 0 1px rgba(0,0,0.5); 
+}
