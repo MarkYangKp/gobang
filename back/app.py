@@ -82,7 +82,7 @@ def fallChess(data):
     else:
         emit('Error! Can not find the room!')
 
-@socketio.on('leave')
+@socketio.on('leaveRoom')
 def on_leave(data):
     username = data['username']
     roomID = data['roomID']
