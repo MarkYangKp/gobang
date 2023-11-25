@@ -38,14 +38,16 @@
             <div class="isPlayChess">
                 <div class="tipText">操作</div>
                 <div class="tipButBox">
-                    <div class="tipBut" data-isplaychess="0">悔棋</div>
-                    <div class="tipBut" data-isplaychess="1">求和</div>
+                    <div class="tipBut" data-isplaychess="0" onclick="testF()">悔棋</div>
+                    <div class="tipBut" data-isplaychess="1" >求和</div>
                     <div class="tipBut" data-isplaychess="2">认输</div>
 
                 </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/socket.io/1.7.4/socket.io.min.js"></script>
+
     <script src="./js/gamePvP.js"></script>
 </body>
 </html>
