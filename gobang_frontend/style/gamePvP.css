@@ -128,3 +128,15 @@ body {
     border-radius: 5px;
     text-align: center;
 }
+.userBox{
+    display: flex;
+    flex-direction: column;
+}
+.userInfo{
+    display: flex;
+    flex-direction: row;
+    width: 150px;
+    box-shadow: 0 0 3px rgba(0, 0, 0.5); 
+    padding: 10px;
+    border-radius: 5px;
+}

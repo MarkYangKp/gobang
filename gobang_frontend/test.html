@@ -3,90 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>五子棋游戏</title>
+  <title>倒计时示例</title>
   <style>
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    #board {
-      display: grid;
-      grid-template-columns: repeat(15, 30px);
-      grid-gap: 2px;
-    }
-
-    .cell {
-      width: 30px;
-      height: 30px;
-      border: 1px solid #000;
-      background-color: #e5e5e5;
-      cursor: pointer;
-    }
-
-    .cell:hover {
-      background-color: #ddd;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      font-size: 24px;
     }
   </style>
 </head>
 <body>
 
-<div id="board"></div>
+<div id="countdown"></div>
 
 <script>
-  const boardSize = 15;
-  const board = [];
-  let currentPlayer = 'black';
+  // 设置目标时间为5分钟后
+  const targetTime = new Date();
+  targetTime.setMinutes(targetTime.getMinutes() + 5);
 
-  function initializeBoard() {
-    for (let i = 0; i < boardSize; i++) {
-      board[i] = [];
-      for (let j = 0; j < boardSize; j++) {
-        board[i][j] = null;
-      }
+  function updateCountdown() {
+    const currentTime = new Date();
+    const timeDifference = targetTime - currentTime;
+
+    if (timeDifference > 0) {
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+      document.getElementById('countdown').innerHTML = `${minutes} 分钟 ${seconds} 秒`;
+    } else {
+      document.getElementById('countdown').innerHTML = '倒计时结束';
     }
   }
 
-  function renderBoard() {
-    const boardElement = document.getElementById('board');
-    boardElement.innerHTML = '';
+  // 每秒更新一次倒计时
+  setInterval(updateCountdown, 1000);
 
-    for (let i = 0; i < boardSize; i++) {
-      for (let j = 0; j < boardSize; j++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        cell.dataset.row = i;
-        cell.dataset.col = j;
-        cell.addEventListener('click', handleCellClick);
-        
-        if (board[i][j] === 'black') {
-          cell.style.backgroundColor = '#000';
-        } else if (board[i][j] === 'white') {
-          cell.style.backgroundColor = '#fff';
-          cell.style.border = '1px solid #000';
-        }
-
-        boardElement.appendChild(cell);
-      }
-    }
-  }
-
-  function handleCellClick(event) {
-    const row = parseInt(event.target.dataset.row);
-    const col = parseInt(event.target.dataset.col);
-
-    if (board[row][col] === null) {
-      board[row][col] = currentPlayer;
-      currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
-      renderBoard();
-    }
-  }
-
-  initializeBoard();
-  renderBoard();
+  // 初始加载
+  updateCountdown();
 </script>
 
 </body>
