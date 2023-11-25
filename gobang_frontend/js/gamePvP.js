@@ -8,14 +8,16 @@ var chessManuals = [
 var lastBlock = {
     "row": null, "col": null, "lastEvent": null
 }
-//初始化棋盘数组
-for (var i = 0; i < 19; i++) {
-    boardData[i] = [];
-    for (var j = 0; j < 19; j++) {
-        boardData[i][j] = 0;
+
+function InitBoard() {
+    //初始化棋盘数组
+    for (var i = 0; i < 19; i++) {
+        boardData[i] = [];
+        for (var j = 0; j < 19; j++) {
+            boardData[i][j] = 0;
+        }
     }
 }
-
 //渲染棋盘
 function RenderBoard() {
     const boardElement = document.getElementById('boardPad');
@@ -94,8 +96,13 @@ function handleCellClick(event) {
             }
         }
         chessManuals.push(chessManual)
+        // RenderBoard()
         if (checkWin(playerType, row, col)) {
+            
             console.log("Player:" + playerType + "Win!!!")
+            alert("黑方赢！！！")
+            InitBoard() 
+            // RenderBoard()
         }
         playerType = 2
     } else if (playerType == 2) {
@@ -113,8 +120,13 @@ function handleCellClick(event) {
             }
         }
         chessManuals.push(chessManual)
+        // RenderBoard()
         if (checkWin(playerType, row, col)) {
+            
             console.log("Player:" + playerType + "Win!!!")
+            alert("白方赢！！！")
+            InitBoard() 
+            // RenderBoard()
         }
         playerType = 1
 
@@ -167,7 +179,7 @@ function checkWin(player, row, col) {
     // 检查水平方向
     let count = 0;
     for (let i = col - 4; i <= col + 4; i++) {
-        if ( i >= 0 && i < 19&&boardData[row][i] === player ) {
+        if (i >= 0 && i < 19 && boardData[row][i] === player) {
             count++;
             if (count === 5) {
                 return true;
@@ -180,7 +192,7 @@ function checkWin(player, row, col) {
     // 检查垂直方向
     count = 0;
     for (let i = row - 4; i <= row + 4; i++) {
-        if (i >= 0 && i < 19 &&boardData[i][col] === player ) {
+        if (i >= 0 && i < 19 && boardData[i][col] === player) {
             count++;
             if (count === 5) {
                 return true;
@@ -219,4 +231,5 @@ function checkWin(player, row, col) {
 
     return false;
 }
+InitBoard() 
 RenderBoard()

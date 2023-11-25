@@ -18,7 +18,10 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     width: 580px;
-
+    border:solid 2px black; 
+    justify-content: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .cell-black {
