@@ -1,3 +1,21 @@
+//棋盘数据  0 为空 1为黑 2为白
+var boardData = [[]];
+//记录棋谱
+var chessManuals = [
+    // {"userType":null,"pos":{"x":null,"y":null}}
+]
+//记录上一次点击的格子
+var lastBlock = {
+    "row": null, "col": null, "lastEvent": null
+}
+//初始化棋盘数组
+for (var i = 0; i < 19; i++) {
+    boardData[i] = [];
+    for (var j = 0; j < 19; j++) {
+        boardData[i][j] = 0;
+    }
+}
+
 function initBoard() {
     const boardElement = document.getElementById('boardPad');
     boardElement.innerHTML = '';
@@ -7,7 +25,7 @@ function initBoard() {
             cell.className = 'cell-null';
             cell.dataset.row = i;
             cell.dataset.col = j;
-            cell.addEventListener('click', handleCellClick);
+            cell.addEventListener('click', chooseBlock);
             boardElement.appendChild(cell);
         }
     }
@@ -46,23 +64,71 @@ function testF() {
 function isPlayChess() {
 
 }
-var playerType = 0
+var playerType = 1
 function handleCellClick(event) {
     const row = parseInt(event.target.dataset.row);
     const col = parseInt(event.target.dataset.col);
     console.log(event)
-    if (playerType == 0) {
+    //判断黑白方
+    if (playerType == 1) {
+        //显示黑棋
         event.target.classList.remove("cell-null")
         event.target.classList.remove("cell-white")
-        playerType = 1
+        event.target.classList.remove("cell-enter")
         event.target.classList.add("cell-black")
-    } else if (playerType == 1) {
+
+
+        boardData[row][col] = 1
+        chessManual = {
+            "userType": playerType,
+            "pos": {
+                "x": col, "y": row  //x,y坐标和行列是相反的
+            }
+        }
+        chessManuals.push(chessManual)
+        playerType = 2
+    } else if (playerType == 2) {
+        //显示白棋
         event.target.classList.remove("cell-null")
         event.target.classList.remove("cell-black")
+        event.target.classList.remove("cell-enter")
         event.target.classList.add("cell-white")
-        playerType = 0
+
+        boardData[row][col] = 2
+        chessManual = {
+            "userType": playerType,
+            "pos": {
+                "x": col, "y": row  //x,y坐标和行列是相反的
+            }
+        }
+        chessManuals.push(chessManual)
+        playerType = 1
+
     }
 
-    console.log(event)
+    console.log(boardData)
+    console.log(chessManuals)
 }
+
+function chooseBlock(event) {
+    const row = parseInt(event.target.dataset.row);
+    const col = parseInt(event.target.dataset.col);
+
+    if (lastBlock.col == col && lastBlock.row == row) {
+        handleCellClick(event)
+    } else {
+        if (lastBlock.lastEvent != null) {
+            lastBlock.lastEvent.target.classList.remove("cell-enter")
+            lastBlock.lastEvent.target.classList.add("cell-null")
+            console.log("ww")
+        }
+
+        event.target.classList.add("cell-enter")
+        lastBlock.col = col
+        lastBlock.row = row
+        lastBlock.lastEvent = event
+    }
+    console.log(lastBlock)
+}
+
 initBoard()
