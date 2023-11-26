@@ -13,21 +13,23 @@ CORS(app)  # Enable CORS for all routes
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 class Room:
-    def __init__(self, roomID, player1, player2, moves):
+    def __init__(self, roomID, player1, player2, players, moves):
         self.roomID = roomID
         self.player1 = player1
         self.player2 = player2
+        self.players = 0
         self.board = [[0 for _ in range(19)] for _ in range(19)]
         self.moves = []
+        self.next = None
 
 class RoomList:
     def __init__(self):
         # 初始化房间列表，头部节点为None
         self.head = None
 
-    def add_room(self, roomID, player1, player2 ,moves):
+    def add_room(self, roomID, player1, player2 , players, moves):
         # 创建一个新的房间对象
-        new_room = Room(roomID, player1, player2 ,moves)
+        new_room = Room(roomID, player1, player2 , players, moves)
         if self.head is None:
             # 如果列表为空，将新房间设置为头部节点
             self.head = new_room
@@ -39,6 +41,7 @@ class RoomList:
             # 将新房间连接到最后一个节点的后面
             current.next = new_room
 
+
     def get_room(self, roomID):
         current = self.head
         while current is not None:
@@ -49,8 +52,8 @@ class RoomList:
         return None  # 如果未找到匹配的房间，则返回None
     
 
-    def delete_room(roomID):
-        current = rooms.head
+    def delete_room(self,roomID):
+        current = self.head
         prev = None
         while current is not None:
             if current.roomID == roomID:
@@ -60,7 +63,7 @@ class RoomList:
                     'player1': current.player1,
                     'player2': current.player2,
                     'moves': current.moves,
-                    'time': time.localtime()
+                    'time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 }
                 with open('chessManual.json', 'a') as file:
                     json.dump(data, file, indent=4)
@@ -80,42 +83,53 @@ class RoomList:
 
 rooms = RoomList() #房间链表，每个节点存一个房间，游戏结束删除节点
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
 #进房间列表
 @app.route("/roomList")
 def showRoomList():
    return render_template("roomList.html") 
+
 #进入
 @app.route("/gamePvP")
 def gamePvP():
     return render_template("gamePvP.html")
-@app.route("/")
-def index():
-    return render_template("index.html")
+
+
+#新建一个房间，但不加入，渲染在房间列表里，人数为0
 @socketio.on('newRoom')
-def newRoom(data):
-    player1 = data['userID']
+def newRoom():
+    player1 = ''
     player2 = ''
     roomID = str(random.randint(100000, 999999))  # 生成六位随机数字作为房间ID
     moves=[]
-    rooms.add_room(roomID,player1,player2,moves)
-    emit('room_created', {'player1':player1,'player2':player2,'roomID':roomID,'state':'wait'}, broadcast=True)
+    players = 0
+    rooms.add_room(roomID,player1,player2,players,moves)
+    emit('room_created', {'player1':player1,'player2':player2,'roomID':roomID,'state':'wait','players':players})#用这里的数据渲染新房间
+
 
 @socketio.on('joinRoom')
 def joinRoom(data):
-    # player2 = data['userID']
-    # roomID = data['roomID']
-    # current = rooms.get_room(roomID)
-    # if current is not None:
-    #     current.player2 = player2
-    #     player1 = current.player1
-    #     emit('game_start',{'player1':player1,'player2':player2,'room':roomID,'state':'start'},bordcast=True)
-    # else:
-    #     emit('Error! Can not find the room!')
-    print("helloworld")
-@socketio.on('message')
-def handle_message(message):
-    print('Received message:', message)
-    socketio.emit('response', {'data': 'Server response'})
+    player = data['userID'] #请求加入房间者的userID
+    roomID = data['roomID']
+    current = rooms.get_room(roomID)
+    if current is not None:
+        join_room(roomID)
+        if current.players == 0:
+            current.player1 = player
+            emit('roomState',{'player1':player,'player2':'','room':roomID,'state':'wait'},room=roomID) #根据state的值判断是否开始游戏
+        elif current.player2 == 1:
+            current.player2 = player
+            emit('roomState',{'player1':current.player1,'player2':player,'room':roomID,'state':'start'},room=roomID)
+    else:
+        emit('Error! Can not find the room!')
+
+
+
+
+
 @socketio.on('roomList')
 def roomList():
     room_data = []
@@ -125,6 +139,7 @@ def roomList():
             'roomID': current.roomID,
             'player1': current.player1,
             'player2': current.player2,
+            'players': current.players
         })
         current = current.next
     emit('room_list',roomList=room_data)
@@ -149,19 +164,20 @@ def fallChess(data):
         else:
             # 用户ID不匹配，无法落子
             return
+        emit('opponentFallChess',{'x':x, 'y':y, 'roomID':roomID, 'userID':userID},room=roomID)    
         #判断连线
-        if check_win(current.board,x,y):
-            #处理胜利事件
-            if check_win(current.board,x,y) == 1:
-                # 销毁当前房间
-                rooms.delete_room(current.roomID)
-                emit('player1_win!',{'state':'win','winner':current.player1,'roomID':current.roomID})
-            elif check_win(current.board,x,y) == 2:
-                rooms.delete_room(current.roomID)
-                emit('player2_win!',{'state':'win','winner':current.player2,'roomID':current.roomID})
-        else:
-            # 正常落子
-            emit('chess_fallen', {'x': x, 'y': y, 'room': roomID, 'userID': userID})
+        # if check_win(current.board,x,y):
+        #     #处理胜利事件
+        #     if check_win(current.board,x,y) == 1:
+        #         # 销毁当前房间
+        #         rooms.delete_room(current.roomID)
+        #         emit('player1_win!',{'state':'win','winner':current.player1,'roomID':current.roomID})
+        #     elif check_win(current.board,x,y) == 2:
+        #         rooms.delete_room(current.roomID)
+        #         emit('player2_win!',{'state':'win','winner':current.player2,'roomID':current.roomID})
+        # else:
+        #     # 正常落子
+        #     emit('chess_fallen', {'x': x, 'y': y, 'room': roomID, 'userID': userID},room=roomID) #仅为指定房间广播
     else:
         emit('Error! Can not find the room!')
 
@@ -188,7 +204,7 @@ def undoMove(data):
                 x, y, player = last_move
                 current.board[x][y] = 0
                 # 发送悔棋事件
-                emit('undo_move', { 'room': roomID, 'userID': userID},boradcast=True)
+                emit('undo_move', { 'room': roomID, 'userID': userID},room=roomID)
             else:
                 # 没有可悔棋的步骤
                 emit('Error! No moves to undo!',room=current.roomID)
