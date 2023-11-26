@@ -32,6 +32,7 @@ class RoomList:
         new_room = Room(roomID, player1, player2 , players, moves)
         if self.head is None:
             # 如果列表为空，将新房间设置为头部节点
+            print('0')
             self.head = new_room
         else:
             current = self.head
@@ -39,6 +40,7 @@ class RoomList:
                 # 遍历列表，找到最后一个节点
                 current = current.next
             # 将新房间连接到最后一个节点的后面
+            print('1')
             current.next = new_room
 
 
@@ -107,7 +109,7 @@ def newRoom():
     moves=[]
     players = 0
     rooms.add_room(roomID,player1,player2,players,moves)
-    emit('room_created', {'player1':player1,'player2':player2,'roomID':roomID,'state':'wait','players':players})#用这里的数据渲染新房间
+    emit('room_created', {'player1':player1,'player2':player2,'roomID':roomID,'state':'wait','players':players},bordcast=False)#用这里的数据渲染新房间
 
 
 @socketio.on('joinRoom')
@@ -142,7 +144,8 @@ def roomList():
             'players': current.players
         })
         current = current.next
-    emit('room_list',roomList=room_data)
+    print(room_data)
+    emit('room_list',room_data)
 
 
 
