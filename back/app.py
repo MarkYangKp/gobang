@@ -4,11 +4,13 @@ import random
 from checkLine import check_win
 import time
 import json
+from flask_cors import CORS  # Import the CORS module
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
-socketio = SocketIO(app)
+CORS(app)  # Enable CORS for all routes
 
+socketio = SocketIO(app, cors_allowed_origins='*')
 
 class Room:
     def __init__(self, roomID, player1, player2, moves):
@@ -76,9 +78,18 @@ class RoomList:
 
 
 
-
 rooms = RoomList() #房间链表，每个节点存一个房间，游戏结束删除节点
 
+#进房间列表
+@app.route("/roomList")
+def showRoomList():
+   return render_template("roomList.html") 
+@app.route("/gamePvP")
+def gamePvP():
+    return render_template("gamePvP.html")
+@app.route("/")
+def index():
+    return render_template("index.html")
 @socketio.on('newRoom')
 def newRoom(data):
     player1 = data['userID']
@@ -89,16 +100,20 @@ def newRoom(data):
 
 @socketio.on('joinRoom')
 def joinRoom(data):
-    player2 = data['userID']
-    roomID = data['roomID']
-    current = rooms.get_room(roomID)
-    if current is not None:
-        current.player2 = player2
-        player1 = current.player1
-        emit('game_start',{'player1':player1,'player2':player2,'room':roomID,'state':'start'},bordcast=True)
-    else:
-        emit('Error! Can not find the room!')
-
+    # player2 = data['userID']
+    # roomID = data['roomID']
+    # current = rooms.get_room(roomID)
+    # if current is not None:
+    #     current.player2 = player2
+    #     player1 = current.player1
+    #     emit('game_start',{'player1':player1,'player2':player2,'room':roomID,'state':'start'},bordcast=True)
+    # else:
+    #     emit('Error! Can not find the room!')
+    print("helloworld")
+@socketio.on('chat message')
+def handle_message(message):
+    print('Received message:', message)
+    socketio.emit('response', {'data': 'Server response'})
 @socketio.on('roomList')
 def roomList():
     room_data = []

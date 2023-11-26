@@ -7,8 +7,8 @@ function modelCheck(e) {
     // var OS = outils.getOS()
     // console.log(OS)
     if(model == "pvp"){
-        window.location.href = "roomList.html?userID="+userID;
+        window.location.href = "roomList?userID="+userID;
     }else if(model == "pve"){
-        window.location.href = "gamePvE.html?userID="+userID; 
+        window.location.href = "gamePvE?userID="+userID; 
     }
 }

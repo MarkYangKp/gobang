@@ -8,7 +8,7 @@ var chessManuals = [
 var lastBlock = {
     "row": null, "col": null, "lastEvent": null
 }
-
+// import io from "socket.io-client";
 function InitBoard() {
     //初始化棋盘数组
     for (var i = 0; i < 19; i++) {
@@ -40,34 +40,46 @@ function RenderBoard() {
         }
     }
 }
+let socket = null
 // 引入socket.io-client库
 // import io from 'socket.io-client';
 function testF() {
-    // 连接到后端的Socket.IO服务器
-    const socket = io('http://127.0.0.1:5000');
+    // const express = require('express');
+    // const http = require('http');
+    // const socketIO = require('socket.io');
+    // const cors = require('cors');
 
-    // 发送joinRoom事件
-    socket.emit('joinRoom', {
-        userID: 'yourUserID',  // 替换为实际的用户ID
-        roomID: 'yourRoomID'   // 替换为实际的房间ID
+    // const app = express();
+    // app.use(cors()); // 添加这一行以启用所有路由的 CORS
+
+    // const server = http.createServer(app);
+    // const io = socketIO(server);
+    // 创建WebSocket对象，指定WebSocket服务器的地址
+    socket = io('http://127.0.0.1:5000/');
+    // 处理连接和断开事件
+    socket.on('connect', () => {
+        console.log('Connected to server');
     });
+    // // 监听WebSocket接收到消息事件
+    // socket.addEventListener('message', (event) => {
+    //     console.log('接收到消息:', event.data);
+    // });
 
-    // 监听game_start事件
-    socket.on('game_start', (data) => {
-        console.log('游戏开始:', data);
+    // // 监听WebSocket连接关闭事件
+    // socket.addEventListener('close', (event) => {
+    //     console.log('WebSocket连接已关闭');
+    // });
 
-        // 在这里处理游戏开始的逻辑
-        // 例如，更新页面上的内容，显示游戏界面等
-    });
+    // // 监听WebSocket连接发生错误事件
+    // socket.addEventListener('error', (event) => {
+    //     console.error('WebSocket连接发生错误:', event);
+    // });
 
-    // 监听Error事件
-    socket.on('Error', (errorMessage) => {
-        console.error('发生错误:', errorMessage);
+}
 
-        // 在这里处理错误的逻辑
-        // 例如，显示错误消息给用户等
-    });
-
+function send() {
+    // Send a message from the client to the server
+    socket.emit('chat message', 'Hello, server!');
 }
 
 
@@ -98,10 +110,10 @@ function handleCellClick(event) {
         chessManuals.push(chessManual)
         // RenderBoard()
         if (checkWin(playerType, row, col)) {
-            
+
             console.log("Player:" + playerType + "Win!!!")
             alert("黑方赢！！！")
-            InitBoard() 
+            InitBoard()
             // RenderBoard()
         }
         playerType = 2
@@ -122,10 +134,10 @@ function handleCellClick(event) {
         chessManuals.push(chessManual)
         // RenderBoard()
         if (checkWin(playerType, row, col)) {
-            
+
             console.log("Player:" + playerType + "Win!!!")
             alert("白方赢！！！")
-            InitBoard() 
+            InitBoard()
             // RenderBoard()
         }
         playerType = 1
@@ -231,5 +243,5 @@ function checkWin(player, row, col) {
 
     return false;
 }
-InitBoard() 
+InitBoard()
 RenderBoard()
