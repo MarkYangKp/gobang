@@ -25,9 +25,9 @@ class RoomList:
         # 初始化房间列表，头部节点为None
         self.head = None
 
-    def add_room(self, roomID, player1, player2):
+    def add_room(self, roomID, player1, player2 ,moves):
         # 创建一个新的房间对象
-        new_room = Room(roomID, player1, player2)
+        new_room = Room(roomID, player1, player2 ,moves)
         if self.head is None:
             # 如果列表为空，将新房间设置为头部节点
             self.head = new_room
@@ -98,7 +98,7 @@ def newRoom(data):
     roomID = str(random.randint(100000, 999999))  # 生成六位随机数字作为房间ID
     moves=[]
     rooms.add_room(roomID,player1,player2,moves)
-    emit('room_created', {'player1':player1,'player2':player2,'room':roomID,'state':'wait'}, broadcast=True)
+    emit('room_created', {'player1':player1,'player2':player2,'roomID':roomID,'state':'wait'}, broadcast=True)
 
 @socketio.on('joinRoom')
 def joinRoom(data):

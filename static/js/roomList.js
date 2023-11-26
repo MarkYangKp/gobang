@@ -19,6 +19,8 @@ function createRoom(){
     socket.emit("newRoom",data)
     socket.on("room_created",(res)=>{
         console.log(res)
+        
+        window.location.href = "./gamePvP?roomID="+res.roomID;
     })
 }
 onLoad()
