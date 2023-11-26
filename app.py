@@ -96,7 +96,8 @@ def newRoom(data):
     player1 = data['userID']
     player2 = ''
     roomID = str(random.randint(100000, 999999))  # 生成六位随机数字作为房间ID
-    rooms.add_room(roomID,player1,player2)
+    moves=[]
+    rooms.add_room(roomID,player1,player2,moves)
     emit('room_created', {'player1':player1,'player2':player2,'room':roomID,'state':'wait'}, broadcast=True)
 
 @socketio.on('joinRoom')
