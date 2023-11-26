@@ -84,6 +84,7 @@ rooms = RoomList() #房间链表，每个节点存一个房间，游戏结束删
 @app.route("/roomList")
 def showRoomList():
    return render_template("roomList.html") 
+#进入
 @app.route("/gamePvP")
 def gamePvP():
     return render_template("gamePvP.html")
