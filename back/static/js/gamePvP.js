@@ -79,7 +79,7 @@ function testF() {
 
 function send() {
     // Send a message from the client to the server
-    socket.emit('chat message', 'Hello, server!');
+    socket.emit('message', 'Hello, server!');
 }
 
 

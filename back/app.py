@@ -111,7 +111,7 @@ def joinRoom(data):
     # else:
     #     emit('Error! Can not find the room!')
     print("helloworld")
-@socketio.on('chat message')
+@socketio.on('message')
 def handle_message(message):
     print('Received message:', message)
     socketio.emit('response', {'data': 'Server response'})
