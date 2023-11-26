@@ -57,8 +57,9 @@ function testF() {
     // 创建WebSocket对象，指定WebSocket服务器的地址
     socket = io('http://127.0.0.1:5000/');
     // 处理连接和断开事件
-    socket.on('connect', () => {
+    socket.on('roomList', (res) => {
         console.log('Connected to server');
+        console.log(res)
     });
     // // 监听WebSocket接收到消息事件
     // socket.addEventListener('message', (event) => {

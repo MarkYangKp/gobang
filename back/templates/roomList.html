@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人人对弈模式</title>
     <link rel="stylesheet" type="text/css" href="../static/style/roomList.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
 </head>
 <body>
     <script src="../static/js/roomList.js"></script>
@@ -14,6 +15,7 @@
         </div>
     </div>
     <div id="main">
+        <button onclick="createRoom()">创建房间</button>
         <div class="roomList" id="roomList">
             <div class="roomItem" data-roomid="123" onclick="joinRoom(event)">
                 <div class="roomIDBox">
