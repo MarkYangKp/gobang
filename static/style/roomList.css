@@ -17,7 +17,8 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: lefl;
+    justify-content: left;
+    width: 900px;
 }
 
 .roomItem {
