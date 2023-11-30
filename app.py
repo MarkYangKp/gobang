@@ -53,7 +53,7 @@ def newRoom():
     session.add(new_room)
     session.commit()
     
-    emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 'wait'})
+    emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 'wait'},broadcast=True)
 
 @socketio.on('roomList')
 def roomList():
@@ -65,7 +65,7 @@ def roomList():
     for room in rooms:
         room_data.append({'player1': room.player1, 'player2': room.player2, 'roomID': room.roomID})
     
-    emit('room_list', room_data)
+    emit('room_list', room_data,broadcast=True)
 
 if __name__ == '__main__':
     socketio.run(app)

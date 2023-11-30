@@ -26,8 +26,6 @@
        </div>
    </div>
     <div id="main">
-        <button onclick="createRoom()">创建房间</button>
-        <button onclick="getRoomList()">刷新房间列表</button>
         <div class="roomList" id="roomList">
             <div class="roomItem" data-roomid="123" onclick="joinRoom(event)">
                 <div class="roomIDBox">
@@ -46,6 +44,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="createRoom">
+            <span class="createRoom-item" onclick="createRoom()"></span>
         </div>
     </div>
     <script src="../static/js/roomList.js"></script>

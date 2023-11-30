@@ -19,6 +19,7 @@ body {
     flex-wrap: wrap;
     justify-content: left;
     width: 900px;
+    min-height: 600px;
 }
 
 .roomItem {
@@ -26,21 +27,63 @@ body {
     box-shadow: 0 0 1px rgba(0, 0, 0.5);
     margin-left: 10px;
     width: 23%;
+    height: 100px;
     margin-bottom: 20px;
     box-sizing: border-box;
 }
+
 .roomItem:active{
     background-color: #e5e5e5;
 }
+
 .roomIDBox{
     display: flex;
     flex-direction: row;
 }
+
 .userList{
     display: flex;
     flex-direction: column;
 }
+
 .userBox{
     display: flex;
     flex-direction: row; 
+}
+
+.createRoom{
+    position:sticky;
+    bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.createRoom-item{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    background-color: #e5e5e5;
+    position: relative;
+}
+.createRoom-item::before{
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 40px;
+    left: 22.5px;
+    top: 5px;
+    background-color: #ffffff;
+}
+.createRoom-item::after{
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 5px;
+    top: 22.5px;
+    left: 5px;
+    background-color: #ffffff;
+}
+.createRoom-item:active{
+    background-color: #ffffff;
 }
