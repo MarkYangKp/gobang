@@ -73,13 +73,14 @@ function joinRoom(e) {
 }
 let socket = null
 function onLoad() {
+    
+}
+function createRoom() {
     socket = io('http://127.0.0.1:5000/');
     socket.on("connect", (res) => {
         console.log("连接成功")
         
     })
-}
-function createRoom() {
     socket.emit("newRoom")
     socket.on("room_created", (res) => {
         console.log(res)
