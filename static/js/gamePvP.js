@@ -244,5 +244,13 @@ function checkWin(player, row, col) {
 
     return false;
 }
+function addClick()
+{
+    const index = document.getElementById("indexPage")
+    index.addEventListener("click",function(){
+        window.location.href = "/"; 
+    })
+}
+addClick()
 InitBoard()
 RenderBoard()
