@@ -90,6 +90,11 @@ function createRoom() {
 }
 
 function getRoomList() {
+    socket = io('http://127.0.0.1:5000/');
+    socket.on("connect", (res) => {
+        console.log("连接成功")
+        
+    })
     console.log('9')
     socket.emit("roomList");
     socket.on("room_list", (roomList) => {
