@@ -96,6 +96,13 @@ function getRoomList() {
     });
 }
 
-
+function addClick()
+{
+    const index = document.getElementById("indexPage")
+    index.addEventListener("click",function(){
+        window.location.href = "/"; 
+    })
+}
+addClick()
 
 onLoad()

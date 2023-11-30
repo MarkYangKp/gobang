@@ -6,20 +6,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="../static/style/index.css">
+    <link rel="stylesheet" type="text/css" href="../static/style/nav.css"/>
+
 </head>
 
 <body>
     <script src="../static/js/index.js"></script>
+    <div id="header">
+         <div class="NavBox">
+            <div class="navItem"><span>首页</span></div>
+            <div class="navItem"><span>关于</span></div>
+         </div>
+        <div class="UserBox">
+            <div class="avatarBox">
+                <img class="imgAvatar"/>
+            </div>
+            <div class="nickNameBox">
+                <span>Mark</span>
+            </div>
+        </div>
+    </div>
     <div id="main">
-        <div class="modelText">
-            <h1>请选择模式</h1>
+        <div class="main-item">
+            <div class="item-item">
+                <h1>五子棋</h1>
+                <img src="" class="imgImg"/>
+            </div>
+            <div class="item-item">
+                <div class="modelText">
+                    <h1>请选择模式</h1>
+                </div>
+                <div class="modelBox">
+                    <div id="pvpBut" onclick="modelCheck(event)" data-model="pvp" class="Butt">人人对弈</div>
+                </div>
+                <div class="modelBox">
+                    <div id="pveBut" data-model="pve"onclick="modelCheck(event)" class="Butt">人机对弈</div>
+                </div>
+
+            </div>
         </div>
-        <div class="modelBox">
-            <div id="pvpBut" onclick="modelCheck(event)" data-model="pvp" class="Butt">人人对弈</div>
+        <div class="main-item1">
+            <h2>排行榜</h2>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>排名</span></div>
+                <div class="rankBox-item"><span>昵称</span></div>
+                <div class="rankBox-item"><span>胜</span>/<span>败</span>/<span>平</span></div>
+                <div class="rankBox-item"><span>得分</span></div> 
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
+            <div class="rankBox">
+                <div class="rankBox-item"><span>1.</span></div>
+                <div class="rankBox-item"><span>Mark</span></div>
+                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
+                <div class="rankBox-item"><span>2000</span></div>
+            </div>
         </div>
-        <div class="modelBox">
-            <div id="pveBut" data-model="pve"onclick="modelCheck(event)" class="Butt">人机对弈</div>
-        </div>
+        
     </div>
 </body>
 

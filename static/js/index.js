@@ -11,6 +11,6 @@ function modelCheck(e) {
     }else if(model == "pve"){
         window.location.href = "gamePvE?userID="+userID; 
     }
-    if(0){if(0){}if(0){}if(0){}if(0){}if(0){}}
+
     //qdqwdqd
 }
