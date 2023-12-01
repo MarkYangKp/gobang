@@ -101,7 +101,7 @@ function handleCellClick(event) {
         col:col,
     }
     socket.emit("fallChess",data)
-
+    isPlay = 0
     console.log(boardData)
     console.log(chessManuals)
 }
@@ -255,6 +255,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (res.state == 1) {
             isStart = true
             RenderBoard()
+            if(player == 1){
+                isPlay == 1
+            }
             socket.on("fallChess_success",res1=>{
                 
                 var row = res1.row;

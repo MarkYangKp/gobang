@@ -71,17 +71,8 @@ let socket = null
 
 function joinRoom(e) {
     //建立socket连接
-    socket = io('http://127.0.0.1:5000)');
     var roomId = e.target.dataset.roomId
-    data = {
-        'roomID':roomId,
-        'userID':localStorage.getItem('user_id').toString()
-    }
-    socket.emit("joinRoom", roomId,userID);
-    socket.on('joinRoom_success', (res) => {
-        console.log('可以开始了')
-        
-    })
+    window.location.href = "./gamePvP?roomID="+roomId 
     
 }
 
