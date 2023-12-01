@@ -45,7 +45,7 @@ def newRoom(data):
     player1 = data['userID']
     player2 = ''
     roomID = str(random.randint(100000, 999999))
-    
+    join_room(roomID)
     # Create a new Room object and add it to the database
     new_room = Room(player1=player1, player2=player2, roomID=roomID)
     session.add(new_room)
