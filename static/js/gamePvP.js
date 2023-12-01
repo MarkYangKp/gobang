@@ -245,9 +245,13 @@ document.addEventListener("DOMContentLoaded", function () {
     roomID = urlParams.get('roomID');
 
     userID = localStorage.getItem('user_id');
+    data = {
+        roomID:roomID,
+        userID:userID
+    }
     const socketio = io('http://127.0.0.1:5000/');
-    socketio.emit("")
-    socketio.on("", (res) => {
+    socketio.emit("joinRoom",data)
+    socketio.on("joinRoom_success", (res) => {
         if (res.state == 1) {
             isStart = true
             RenderBoard()
