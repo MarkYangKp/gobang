@@ -8,6 +8,12 @@ var chessManuals = [
 var lastBlock = {
     "row": null, "col": null, "lastEvent": null
 }
+
+
+var isStart = false; //是否开始游戏
+var player = 0 //玩家类型  1 2 
+var isPlay = 0 //能否落子状态 0否 1能
+
 // import io from "socket.io-client";
 function InitBoard() {
     //初始化棋盘数组
@@ -40,49 +46,6 @@ function RenderBoard() {
         }
     }
 }
-let socket = null
-// 引入socket.io-client库
-// import io from 'socket.io-client';
-function testF() {
-    // const express = require('express');
-    // const http = require('http');
-    // const socketIO = require('socket.io');
-    // const cors = require('cors');
-
-    // const app = express();
-    // app.use(cors()); // 添加这一行以启用所有路由的 CORS
-
-    // const server = http.createServer(app);
-    // const io = socketIO(server);
-    // 创建WebSocket对象，指定WebSocket服务器的地址
-    socket = io('http://127.0.0.1:5000/');
-    // 处理连接和断开事件
-    socket.on('roomList', (res) => {
-        console.log('Connected to server');
-        console.log(res)
-    });
-    // // 监听WebSocket接收到消息事件
-    // socket.addEventListener('message', (event) => {
-    //     console.log('接收到消息:', event.data);
-    // });
-
-    // // 监听WebSocket连接关闭事件
-    // socket.addEventListener('close', (event) => {
-    //     console.log('WebSocket连接已关闭');
-    // });
-
-    // // 监听WebSocket连接发生错误事件
-    // socket.addEventListener('error', (event) => {
-    //     console.error('WebSocket连接发生错误:', event);
-    // });
-
-}
-
-function send() {
-    // Send a message from the client to the server
-    socket.emit('message', 'Hello, server!');
-}
-
 
 function isPlayChess() {
 
@@ -93,56 +56,42 @@ function handleCellClick(event) {
     const col = parseInt(event.target.dataset.col);
     console.log(event)
     //判断黑白方
-    if (playerType == 1) {
-        //显示黑棋
-        // event.target.classList.remove("cell-null")
-        // event.target.classList.remove("cell-white")
-        // event.target.classList.remove("cell-enter")
-        // event.target.classList.add("cell-black")
-
+    if (player == 1) {
 
         boardData[row][col] = 1
         chessManual = {
-            "userType": playerType,
+            "userType": player,
             "pos": {
                 "x": col, "y": row  //x,y坐标和行列是相反的
             }
         }
         chessManuals.push(chessManual)
         // RenderBoard()
-        if (checkWin(playerType, row, col)) {
+        if (checkWin(player, row, col)) {
 
-            console.log("Player:" + playerType + "Win!!!")
+            console.log("Player:" + player + "Win!!!")
             alert("黑方赢！！！")
             InitBoard()
             // RenderBoard()
         }
-        playerType = 2
     } else if (playerType == 2) {
-        //显示白棋
-        // event.target.classList.remove("cell-null")
-        // event.target.classList.remove("cell-black")
-        // event.target.classList.remove("cell-enter")
-        // event.target.classList.add("cell-white")
 
         boardData[row][col] = 2
         chessManual = {
-            "userType": playerType,
+            "userType": player,
             "pos": {
                 "x": col, "y": row  //x,y坐标和行列是相反的
             }
         }
         chessManuals.push(chessManual)
         // RenderBoard()
-        if (checkWin(playerType, row, col)) {
+        if (checkWin(player, row, col)) {
 
-            console.log("Player:" + playerType + "Win!!!")
+            console.log("Player:" + player + "Win!!!")
             alert("白方赢！！！")
             InitBoard()
             // RenderBoard()
         }
-        playerType = 1
-
     }
     RenderBoard()
 
@@ -253,6 +202,31 @@ function checkWin(player, row, col) {
  * 为0，落子后发送给服务器落子坐标，服务器广播给两位玩家最新的棋盘信息
  * 然后客户端更新棋盘信息，并判断如果能否状态为1则变成0，0变成1
  */
+
+//下棋落子
+
+//设置玩家状态
+function StatusChecking()
+{
+    if(player==1){
+        if(isPlay==1){
+            document.getElementById("Player1").classList.remove("await")
+            document.getElementById("Player1").classList.add("play")
+        }else{
+            document.getElementById("Player1").classList.remove("play") 
+            document.getElementById("Player1").classList.add("await")
+        }
+    }else if(player == 2){
+        if(isPlay==1){
+            document.getElementById("Player1").classList.remove("await")
+            document.getElementById("Player1").classList.add("play")
+        }else{
+            document.getElementById("Player1").classList.remove("play") 
+            document.getElementById("Player1").classList.add("await")
+        }
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     // 获取当前页面的URL
     var currentURL = window.location.href;
