@@ -92,14 +92,22 @@ function handleCellClick(event) {
             // RenderBoard()
         }
     }
-    RenderBoard()
+    // RenderBoard()
+    data = {
+        // userID:userID,
+        roomID:roomID,
+        player:player,
+        row:row,
+        col:col,
+    }
+    socket.emit("fallChess",data)
 
     console.log(boardData)
     console.log(chessManuals)
 }
 function SendAndReceive(){
     socket.emit()
-    socket.on()
+    
 }
 function chooseBlock(event) {
     if (isPlay == 0) {
@@ -243,6 +251,24 @@ document.addEventListener("DOMContentLoaded", function () {
         if (res.state == 1) {
             isStart = true
             RenderBoard()
+            socket.on("fallChess_success",res1=>{
+                
+                var row = res1.row;
+                var col = res1.col;
+                var playerType = res1.player
+                if(playerType == 1 && player == 2){
+                    isPlay = 1;
+                }else if(playerType == 2 && player == 1){
+                    isPlay = 1;
+                }else if(playerType == 1 && player == 1){
+                    isPlay = 0;
+                }else if(playerType == 2 && player == 2){
+                    isPlay = 0;
+                }
+                StatusChecking();
+                boardData[row][col] = playerType
+                RenderBoard();
+            })
         } else {
             isStart = false
             document.getElementById('boardPad').innerHTML = "<h1>等待中，未开始</h1>";
