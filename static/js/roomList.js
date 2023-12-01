@@ -77,18 +77,7 @@ function onLoad() {
     
 }
 function createRoom() {
-   
     socket.emit("newRoom")
-    // socket.emit("roomList");
-    // socket.on("room_list", (res) => {
-    //     console.log(res)
-    //     var roomList = document.getElementById('roomList');
-    //     roomList.innerHTML = null 
-    //     res.forEach(element => {
-    //         addRoomToList(element.roomID, element.player1, element.player2);
-    //     });
-        
-    // })  
 }
 document.addEventListener("DOMContentLoaded", function() {
     socket = io('http://127.0.0.1:5000/');
@@ -103,6 +92,9 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // window.location.href = "./gamePvP?roomID="+res.roomID;
     }) 
+    socket.on("room_created",res=>{
+        addRoomToList(res.roomID, res.player1, res.player2); 
+    })
 });
 function getRoomList() {
     socket = io('http://127.0.0.1:5000/');

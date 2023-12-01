@@ -143,3 +143,9 @@ body {
     padding: 10px;
     border-radius: 5px;
 }
+.await{
+    background-color: red;
+}
+.play{
+    background-color: forestgreen;
+}

@@ -66,6 +66,9 @@ def roomList():
         room_data.append({'player1': room.player1, 'player2': room.player2, 'roomID': room.roomID})
     
     emit('room_list', room_data,broadcast=True)
-
+@socketio.on('status')
+def checkStatus(data):
+    print("receive data:"+data)
+    
 if __name__ == '__main__':
     socketio.run(app)
