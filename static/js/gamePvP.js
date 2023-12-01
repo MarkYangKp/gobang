@@ -8,6 +8,7 @@ var chessManuals = [
 var lastBlock = {
     "row": null, "col": null, "lastEvent": null
 }
+var socketio = null
 
 var userID = null
 var roomID = null
@@ -72,7 +73,7 @@ function handleCellClick(event) {
             InitBoard()
             // RenderBoard()
         }
-    } else if (playerType == 2) {
+    } else if (player == 2) {
 
         boardData[row][col] = 2
         chessManual = {
@@ -100,14 +101,14 @@ function handleCellClick(event) {
         row:row,
         col:col,
     }
-    socket.emit("fallChess",data)
+    socketio.emit("fallChess",data)
+    
     isPlay = 0
     console.log(boardData)
     console.log(chessManuals)
 }
 function SendAndReceive(){
-    socket.emit()
-    
+    socketio.emit()
 }
 function chooseBlock(event) {
     if (isPlay == 0) {
@@ -227,11 +228,11 @@ function StatusChecking() {
         }
     } else if (player == 2) {
         if (isPlay == 1) {
-            document.getElementById("Player1").classList.remove("await")
-            document.getElementById("Player1").classList.add("play")
+            document.getElementById("Player2").classList.remove("await")
+            document.getElementById("Player2").classList.add("play")
         } else {
-            document.getElementById("Player1").classList.remove("play")
-            document.getElementById("Player1").classList.add("await")
+            document.getElementById("Player2").classList.remove("play")
+            document.getElementById("Player2").classList.add("await")
         }
     }
 }
@@ -240,25 +241,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // 获取当前页面的URL
     var currentURL = window.location.href;
     // 创建URLSearchParams对象并传入URL
-    var urlParams = new URLSearchParams(currentURL);
+    var urlParams = new URL(currentURL);
     // 获取userID参数的值
-    roomID = urlParams.get('roomID');
-
+    roomID = urlParams.searchParams.get('roomID');
+    console.log(roomID)
     userID = localStorage.getItem('user_id');
     data = {
         roomID:roomID,
         userID:userID
     }
-    const socketio = io('http://127.0.0.1:5000/');
+    socketio = io('http://10.12.112.166:99/');
     socketio.emit("joinRoom",data)
     socketio.on("joinRoom_success", (res) => {
+        if(userID == res.player1){
+            player = 1
+        }else if(userID = res.player2){
+            player = 2
+        }
+        console.log(player)
         if (res.state == 1) {
             isStart = true
             RenderBoard()
             if(player == 1){
-                isPlay == 1
+                isPlay = 1
             }
-            socket.on("fallChess_success",res1=>{
+            StatusChecking()
+            console.log("isPlay:"+isPlay)
+            socketio.on("fallChess_success",res1=>{
                 
                 var row = res1.row;
                 var col = res1.col;
@@ -272,6 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }else if(playerType == 2 && player == 2){
                     isPlay = 0;
                 }
+                console.log("fallChess_success isPlay"+isPlay)
                 StatusChecking();
                 boardData[row][col] = playerType
                 RenderBoard();

@@ -2,8 +2,9 @@ function createRoomItem(roomID, blackPlayer, whitePlayer) {
     // 创建各个元素
     var roomItem = document.createElement('div');
     roomItem.classList.add('roomItem');
-    roomItem.setAttribute('data-roomid', roomID);
-    roomItem.addEventListener('click', joinRoom);
+    // roomItem.setAttribute('data-roomid', roomID);
+    roomItem.dataset.roomid = roomID
+    roomItem.addEventListener('click',joinRoom);
 
     var roomIDBox = document.createElement('div');
     roomIDBox.classList.add('roomIDBox');
@@ -69,11 +70,11 @@ function addRoomToList(roomID, blackPlayer, whitePlayer) {
 
 let socket = null
 
-function joinRoom(e) {
+function joinRoom(event) {
     //建立socket连接
-    var roomId = e.target.dataset.roomId
-    window.location.href = "./gamePvP?roomID="+roomId 
-    
+    var roomID = event.target.dataset.roomid
+    console.log(event)
+    window.location.href = "./gamePvP?roomID="+roomID 
 }
 
 function onLoad() {
@@ -87,7 +88,7 @@ function createRoom() {
     socket.emit("newRoom", data);
 }
 document.addEventListener("DOMContentLoaded", function() {
-    socket = io('http://127.0.0.1:5000/');
+    socket = io('http://10.12.112.166:99/');
     socket.emit("roomList");
     socket.on("room_list", (res) => {
         console.log(res)
@@ -95,20 +96,19 @@ document.addEventListener("DOMContentLoaded", function() {
         roomList.innerHTML = null 
         res.forEach(element => {
             addRoomToList(element.roomID, element.player1, element.player2);
-            
-
         });
-        
-        
     }) 
     socket.on("room_created",res=>{
         addRoomToList(res.roomID, res.player1, res.player2); 
         //先添加房间之后再自动进入，体现一下这个过程
-        window.location.href = "./gamePvP?roomID="+res.roomID
+        if(res.player1 == localStorage.getItem("user_id")){
+            window.location.href = "./gamePvP?roomID="+res.roomID
+        }
+        
     })
 });
 function getRoomList() {
-    socket = io('http://127.0.0.1:5000/');
+    socket = io('http://10.12.112.166:99/');
     socket.on("connect", (res) => {
         console.log("连接成功")
         

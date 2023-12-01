@@ -13,12 +13,14 @@ Base = declarative_base()
 # Define the SQLAlchemy model
 class Room(Base):
     __tablename__ = 'roomList'
+    playerNum = Column(String(2))
     player1 = Column(String(255))
     player2 = Column(String(255))
     roomID = Column(String(6),primary_key=True)
+    
 
 # Connect to the MySQL database using SQLAlchemy
-engine = create_engine('mysql+pymysql://root:www123...@115.159.211.13/GoBang')
+engine = create_engine('mysql+pymysql://root:112316@8.130.129.201/GoBang')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -41,16 +43,18 @@ def gamePvP():
 # ... (other routes remain unchanged)
 
 @socketio.on('newRoom')
-def newRoom(data):
+def newRoom(data):  
     player1 = data['userID']
     player2 = ''
+    playerNum = ''
     roomID = str(random.randint(100000, 999999))
+    # state = 0
     join_room(roomID)
     # Create a new Room object and add it to the database
-    new_room = Room(player1=player1, player2=player2, roomID=roomID)
+    new_room = Room(player1=player1, player2=player2, roomID=roomID, playerNum=playerNum)
     session.add(new_room)
     session.commit()
-    
+
     emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 0},broadcast=True)
 
 @socketio.on('roomList')
@@ -67,16 +71,24 @@ def roomList():
 
 @socketio.on('joinRoom')
 def joinRoom(data):
-    player = data['userID'] # 请求加入房间者的userID
-    roomID = data['roomID'] # 请求加入的房间号
-    room = session.query(Room).filter_by(roomID=roomID).first()
-    if room:
-        join_room(roomID)
-        room.player2 == player
-        session.commit()
-        emit('joinRoom_success', {'player1': room.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
-    else:
-        emit('Error! Can not find the room!')
+     player = data['userID'] # 请求加入房间者的userID
+     roomID = data['roomID'] # 请求加入的房间号
+     room = session.query(Room).filter_by(roomID=roomID).first()
+     if room:
+         if room.playerNum == '':
+            room.playerNum += '1'
+            session.commit()
+            emit('joinRoom_success', {'player1': player, 'player2': '', 'room': roomID, 'state': 0}, broadcast=True)
+         elif room.playerNum == '1':
+            join_room(roomID)
+            room.player2 = player
+            room.playerNum += '1'
+            session.commit()
+            emit('joinRoom_success', {'player1': room.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
+         else:
+            emit('joinRoom_fail', {'room': roomID})
+     else:
+         emit('Error! Can not find the room!')
 
 # @socketio.on('startGame')
 # def startGame(data):
@@ -85,11 +97,12 @@ def joinRoom(data):
 
 @socketio.on('fallChess')
 def fallChess(data):
+    print(data)
     roomID = data['roomID']
     col = data['col']
     row = data['row']
-    player = data['palyer']
-    emit('fallChess_success', {'col': col, 'row': row, 'player': player}, room=roomID)
+    player = data['player']
+    emit('fallChess_success', {'col': col, 'row': row, 'player': player,'roomID':roomID},broadcast=True)
     #可以加一个存储棋步到数据库的操作
 
 
