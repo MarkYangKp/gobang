@@ -103,6 +103,8 @@ document.addEventListener("DOMContentLoaded", function() {
         roomList.innerHTML = null 
         res.forEach(element => {
             addRoomToList(element.roomID, element.player1, element.player2);
+            //先添加房间之后再自动进入，体现一下这个过程
+            
         });
         
         // window.location.href = "./gamePvP?roomID="+res.roomID;
