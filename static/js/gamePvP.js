@@ -9,7 +9,8 @@ var lastBlock = {
     "row": null, "col": null, "lastEvent": null
 }
 
-
+var userID = null
+var roomID = null
 var isStart = false; //是否开始游戏
 var player = 0 //玩家类型  1 2 
 var isPlay = 0 //能否落子状态 0否 1能
@@ -24,6 +25,7 @@ function InitBoard() {
         }
     }
 }
+
 //渲染棋盘
 function RenderBoard() {
     const boardElement = document.getElementById('boardPad');
@@ -47,10 +49,6 @@ function RenderBoard() {
     }
 }
 
-function isPlayChess() {
-
-}
-var playerType = 1
 function handleCellClick(event) {
     const row = parseInt(event.target.dataset.row);
     const col = parseInt(event.target.dataset.col);
@@ -83,8 +81,9 @@ function handleCellClick(event) {
                 "x": col, "y": row  //x,y坐标和行列是相反的
             }
         }
+        
         chessManuals.push(chessManual)
-        // RenderBoard()
+
         if (checkWin(player, row, col)) {
 
             console.log("Player:" + player + "Win!!!")
@@ -98,35 +97,38 @@ function handleCellClick(event) {
     console.log(boardData)
     console.log(chessManuals)
 }
-
+function SendAndReceive(){
+    socket.emit()
+    socket.on()
+}
 function chooseBlock(event) {
-    const row = parseInt(event.target.dataset.row);
-    const col = parseInt(event.target.dataset.col);
-    if (boardData[row][col] == 0) {
-        //判断如果两次点击为同一个坐标这进行落子，
-        //否则清除上一次的样式，更新当前坐标样式
-        if (lastBlock.col == col && lastBlock.row == row) {
-            //落子
-            handleCellClick(event)
-        } else {
-            //删除上一次方格的样式
-            if (lastBlock.lastEvent != null) {
-                lastBlock.lastEvent.target.classList.remove("cell-enter")
-                // lastBlock.lastEvent.target.classList.add("cell-null")
-                console.log("ww")
-            }
-
-            event.target.classList.add("cell-enter")
-            lastBlock.col = col
-            lastBlock.row = row
-            lastBlock.lastEvent = event
-        }
-        console.log(lastBlock)
+    if (isPlay == 0) {
+        console.log("当前不是您落子")
     } else {
-        console.log("您不能在已落子的地方落子")
+        const row = parseInt(event.target.dataset.row);
+        const col = parseInt(event.target.dataset.col);
+        if (boardData[row][col] == 0) {
+            //判断如果两次点击为同一个坐标这进行落子，
+            //否则清除上一次的样式，更新当前坐标样式
+            if (lastBlock.col == col && lastBlock.row == row) {
+                //落子
+                handleCellClick(event)
+            } else {
+                //删除上一次方格的样式
+                if (lastBlock.lastEvent != null) {
+                    lastBlock.lastEvent.target.classList.remove("cell-enter")
+                }
+                event.target.classList.add("cell-enter")
+                lastBlock.col = col
+                lastBlock.row = row
+                lastBlock.lastEvent = event
+            }
+            console.log(lastBlock)
+        } else {
+            console.log("您不能在已落子的地方落子")
+        }
+
     }
-
-
 }
 //悔棋
 function RetractChess() {
@@ -206,42 +208,44 @@ function checkWin(player, row, col) {
 //下棋落子
 
 //设置玩家状态
-function StatusChecking()
-{
-    if(player==1){
-        if(isPlay==1){
+function StatusChecking() {
+    if (player == 1) {
+        if (isPlay == 1) {
             document.getElementById("Player1").classList.remove("await")
             document.getElementById("Player1").classList.add("play")
-        }else{
-            document.getElementById("Player1").classList.remove("play") 
+        } else {
+            document.getElementById("Player1").classList.remove("play")
             document.getElementById("Player1").classList.add("await")
         }
-    }else if(player == 2){
-        if(isPlay==1){
+    } else if (player == 2) {
+        if (isPlay == 1) {
             document.getElementById("Player1").classList.remove("await")
             document.getElementById("Player1").classList.add("play")
-        }else{
-            document.getElementById("Player1").classList.remove("play") 
+        } else {
+            document.getElementById("Player1").classList.remove("play")
             document.getElementById("Player1").classList.add("await")
         }
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // 获取当前页面的URL
     var currentURL = window.location.href;
     // 创建URLSearchParams对象并传入URL
     var urlParams = new URLSearchParams(currentURL);
     // 获取userID参数的值
-    var userID = urlParams.get('userID');
+    roomID = urlParams.get('roomID');
 
-
-    var roomID = ""
+    userID = localStorage.getItem('user_id');
     const socketio = io('http://127.0.0.1:5000/');
     socketio.emit("")
-    socketio.on("",(res)=>{
-        if(res.state=="start"){
+    socketio.on("", (res) => {
+        if (res.state == 1) {
             isStart = true
+            RenderBoard()
+        } else {
+            isStart = false
+            document.getElementById('boardPad').innerHTML = "<h1>等待中，未开始</h1>";
         }
     })
 });
@@ -254,3 +258,8 @@ function addClick() {
 addClick()
 InitBoard()
 RenderBoard()
+// var data = {
+//     roomID:"roomID",
+//     boardData:["row","col","1/2"],
+//     player:"1/2"
+// }
