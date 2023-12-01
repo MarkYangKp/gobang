@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit,join_room,leave_room
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -13,8 +13,6 @@ Base = declarative_base()
 # Define the SQLAlchemy model
 class Room(Base):
     __tablename__ = 'roomList'
-
-    
     player1 = Column(String(255))
     player2 = Column(String(255))
     roomID = Column(String(6),primary_key=True)
@@ -43,8 +41,8 @@ def gamePvP():
 # ... (other routes remain unchanged)
 
 @socketio.on('newRoom')
-def newRoom():
-    player1 = ''
+def newRoom(data):
+    player1 = data['userID']
     player2 = ''
     roomID = str(random.randint(100000, 999999))
     
@@ -53,7 +51,7 @@ def newRoom():
     session.add(new_room)
     session.commit()
     
-    emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 'wait'},broadcast=True)
+    emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 0},broadcast=True)
 
 @socketio.on('roomList')
 def roomList():
@@ -65,10 +63,41 @@ def roomList():
     for room in rooms:
         room_data.append({'player1': room.player1, 'player2': room.player2, 'roomID': room.roomID})
     
-    emit('room_list', room_data,broadcast=True)
-@socketio.on('status')
-def checkStatus(data):
-    print("receive data:"+data)
-    
+    emit('room_list', room_data)
+
+@socketio.on('joinRoom')
+def joinRoom(data):
+    player = data['userID'] # 请求加入房间者的userID
+    roomID = data['roomID'] # 请求加入的房间号
+    room = session.query(Room).filter_by(roomID=roomID).first()
+    if room:
+        join_room(roomID)
+        room.player2 == player
+        session.commit()
+        emit('joinRoom_success', {'player1': room.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
+    else:
+        emit('Error! Can not find the room!')
+
+# @socketio.on('startGame')
+# def startGame(data):
+#     roomID = data['roomID']
+#     emit('startGame', room=roomID)
+
+@socketio.on('fallChess')
+def fallChess(data):
+    roomID = data['roomID']
+    col = data['col']
+    row = data['row']
+    player = data['palyer']
+    emit('fallChess_success', {'col': col, 'row': row, 'player': player}, room=roomID)
+    #可以加一个存储棋步到数据库的操作
+
+
+@socketio.on('repentance')
+def repentance(data):
+    roomID = data['roomID']
+    emit('repentance_success', room=roomID)
+
+
 if __name__ == '__main__':
     socketio.run(app)

@@ -67,12 +67,27 @@ function addRoomToList(roomID, blackPlayer, whitePlayer) {
     roomList.appendChild(newRoomItem);
 }
 
-function joinRoom(e) {
-    var roomId = e.target.dataset.roomId
-
-    window.location.href = "./gamePvP?roomid=" + roomId;
-}
 let socket = null
+
+function joinRoom(e) {
+    //建立socket连接
+    socket = io('http://127.0.0.1:5000)');
+    var roomId = e.target.dataset.roomId
+    socket.emit("joinRoom", roomId,userID);
+    socket.on('joinRoom_success', (res) => {
+        //判断返回的state
+        if (res.state == "wait") {
+            //等待对手
+            window.location.href = "./gamePvP?roomid=" + roomId;
+        }else if(res.state == "start"){
+            //开始游戏
+            window.location.href = "./gamePvP?roomid=" + roomId;
+        }
+        
+    })
+    
+}
+
 function onLoad() {
     
 }
@@ -88,6 +103,8 @@ document.addEventListener("DOMContentLoaded", function() {
         roomList.innerHTML = null 
         res.forEach(element => {
             addRoomToList(element.roomID, element.player1, element.player2);
+            //先添加房间之后再自动进入，体现一下这个过程
+            
         });
         
         // window.location.href = "./gamePvP?roomID="+res.roomID;
