@@ -67,5 +67,25 @@ def roomList():
     
     emit('room_list', room_data)
 
+@socketio.on('joinRoom')
+def joinRoom(data):
+    player = data['userID'] #请求加入房间者的userID
+    roomID = data['roomID']
+    
+    
+    #current = rooms.get_room(roomID)
+    # if current is not None:
+    #     join_room(roomID)
+    #     if current.players == 0:
+    #         current.player1 = player
+    #         emit('roomState',{'player1':player,'player2':'','room':roomID,'state':'wait'},room=roomID) #根据state的值判断是否开始游戏
+    #     elif current.player2 == 1:
+    #         current.player2 = player
+    #         emit('roomState',{'player1':current.player1,'player2':player,'room':roomID,'state':'start'},room=roomID)
+    # else:
+    #     emit('Error! Can not find the room!')
+
+
+
 if __name__ == '__main__':
     socketio.run(app)
