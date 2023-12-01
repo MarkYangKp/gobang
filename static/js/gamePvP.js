@@ -244,11 +244,37 @@ function checkWin(player, row, col) {
 
     return false;
 }
-function addClick()
-{
+
+/**
+ * PVP逻辑
+ * 双方玩家进入房间 给服务器发送开始游戏信号
+ * 服务器广播
+ * 就收到开始后，玩家1开始下落子，其能否落子的状态为1，其玩家2的能否落子状态
+ * 为0，落子后发送给服务器落子坐标，服务器广播给两位玩家最新的棋盘信息
+ * 然后客户端更新棋盘信息，并判断如果能否状态为1则变成0，0变成1
+ */
+document.addEventListener("DOMContentLoaded", function() {
+    // 获取当前页面的URL
+    var currentURL = window.location.href;
+    // 创建URLSearchParams对象并传入URL
+    var urlParams = new URLSearchParams(currentURL);
+    // 获取userID参数的值
+    var userID = urlParams.get('userID');
+
+
+    var roomID = ""
+    const socketio = io('http://127.0.0.1:5000/');
+    socketio.emit("")
+    socketio.on("",(res)=>{
+        if(res.state=="start"){
+            isStart = true
+        }
+    })
+});
+function addClick() {
     const index = document.getElementById("indexPage")
-    index.addEventListener("click",function(){
-        window.location.href = "/"; 
+    index.addEventListener("click", function () {
+        window.location.href = "/";
     })
 }
 addClick()

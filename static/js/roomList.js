@@ -62,38 +62,70 @@ function createUserBox(userType, userName) {
 // 添加新的 roomItem 到 roomList
 function addRoomToList(roomID, blackPlayer, whitePlayer) {
     var roomList = document.getElementById('roomList');
+    // roomList.innerHTML = null
     var newRoomItem = createRoomItem(roomID, blackPlayer, whitePlayer);
     roomList.appendChild(newRoomItem);
 }
 
-function joinRoom(e) {
-    var roomId = e.target.dataset.roomId
-
-    window.location.href = "./gamePvP?roomid=" + roomId;
-}
 let socket = null
+
+function joinRoom(e) {
+    //建立socket连接
+    socket = io('http://127.0.0.1:5000)');
+    var roomId = e.target.dataset.roomId
+    socket.emit("joinRoom", roomId,userID);
+    socket.on('joinRoom_success', (res) => {
+        //判断返回的state
+        if (res.state == "wait") {
+            //等待对手
+            window.location.href = "./gamePvP?roomid=" + roomId;
+        }else if(res.state == "start"){
+            //开始游戏
+            window.location.href = "./gamePvP?roomid=" + roomId;
+        }
+        
+    })
+    
+}
+
 function onLoad() {
+    
+}
+function createRoom() {
+    socket.emit("newRoom")
+}
+document.addEventListener("DOMContentLoaded", function() {
+    socket = io('http://127.0.0.1:5000/');
+    socket.emit("roomList");
+    socket.on("room_list", (res) => {
+        console.log(res)
+        var roomList = document.getElementById('roomList');
+        roomList.innerHTML = null 
+        res.forEach(element => {
+            addRoomToList(element.roomID, element.player1, element.player2);
+        });
+        
+        // window.location.href = "./gamePvP?roomID="+res.roomID;
+    }) 
+    socket.on("room_created",res=>{
+        addRoomToList(res.roomID, res.player1, res.player2); 
+    })
+});
+function getRoomList() {
     socket = io('http://127.0.0.1:5000/');
     socket.on("connect", (res) => {
         console.log("连接成功")
         
     })
-}
-function createRoom() {
-    socket.emit("newRoom")
-    socket.on("room_created", (res) => {
-        console.log(res)
-        addRoomToList(res.roomID, res.player1, res.player2);
-        // window.location.href = "./gamePvP?roomID="+res.roomID;
-    })
-}
-
-function getRoomList() {
     console.log('9')
     socket.emit("roomList");
     socket.on("room_list", (roomList) => {
         console.log(roomList); // 打印 roomList 列表
+        roomList.forEach(element => {
+            addRoomToList(element.roomID,element.player1,element.player2) 
+        });
     });
+
 }
 
 function addClick()

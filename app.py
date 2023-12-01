@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit,join_room,leave_room
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -53,7 +53,7 @@ def newRoom():
     session.add(new_room)
     session.commit()
     
-    emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 'wait'})
+    emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 'wait'},broadcast=True)
 
 @socketio.on('roomList')
 def roomList():
@@ -69,21 +69,25 @@ def roomList():
 
 @socketio.on('joinRoom')
 def joinRoom(data):
-    player = data['userID'] #请求加入房间者的userID
+    player = data['userID'] # 请求加入房间者的userID
+    roomID = data['roomID'] # 请求加入的房间号
+    room = session.query(Room).filter_by(roomID=roomID).first()
+    if room:
+        if room.player1 == '':
+            room.player1 = player
+            join_room(roomID)
+            emit('joinRoom_success', {'player1': player, 'player2': '', 'room': roomID, 'state': 'wait'}, broadcast=True)
+        elif room.player2 == '':
+            room.player2 = player
+            join_room(roomID)
+            emit('joinRoom_success', {'player1': room.player1, 'player2': player, 'room': roomID, 'state': 'start'}, broadcast=True)
+    else:
+        emit('Error! Can not find the room!')
+
+@socketio.on('startGame')
+def startGame(data):
     roomID = data['roomID']
-    
-    
-    #current = rooms.get_room(roomID)
-    # if current is not None:
-    #     join_room(roomID)
-    #     if current.players == 0:
-    #         current.player1 = player
-    #         emit('roomState',{'player1':player,'player2':'','room':roomID,'state':'wait'},room=roomID) #根据state的值判断是否开始游戏
-    #     elif current.player2 == 1:
-    #         current.player2 = player
-    #         emit('roomState',{'player1':current.player1,'player2':player,'room':roomID,'state':'start'},room=roomID)
-    # else:
-    #     emit('Error! Can not find the room!')
+    emit('startGame', room=roomID)
 
 
 
