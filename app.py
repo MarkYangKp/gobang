@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import random
+from checkLine import check_win
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -78,13 +79,13 @@ def joinRoom(data):
          if room.playerNum == '':
             room.playerNum += '1'
             session.commit()
-            emit('joinRoom_success', {'player1': player, 'player2': '', 'room': roomID, 'state': 0}, broadcast=True)
+            emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0}, broadcast=True)
          elif room.playerNum == '1':
             join_room(roomID)
             room.player2 = player
             room.playerNum += '1'
             session.commit()
-            emit('joinRoom_success', {'player1': room.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
+            emit('joinRoom_success'+roomID, {'player1': room.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
          else:
             emit('joinRoom_fail', {'room': roomID})
      else:
@@ -102,9 +103,19 @@ def fallChess(data):
     col = data['col']
     row = data['row']
     player = data['player']
-    emit('fallChess_success', {'col': col, 'row': row, 'player': player,'roomID':roomID},broadcast=True)
+    emit('fallChess_success'+roomID, {'col': col, 'row': row, 'player': player,'roomID':roomID},broadcast=True)
     #可以加一个存储棋步到数据库的操作
-
+    
+@socketio.on('checkWin')
+def CheckWin(data):
+    print(data)
+    roomID = data['roomID']
+    col = data['col']
+    row = data['row']
+    player = data['player']
+    board_data = data['board_data']
+    if check_win(player,row,col,board_data):
+        emit('Win'+roomID,{'winer':player,'roomID':roomID,'status':1},broadcast=True)
 
 @socketio.on('repentance')
 def repentance(data):

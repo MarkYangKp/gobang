@@ -66,13 +66,13 @@ function handleCellClick(event) {
         }
         chessManuals.push(chessManual)
         // RenderBoard()
-        if (checkWin(player, row, col)) {
+        // if (checkWin(player, row, col)) {
 
-            console.log("Player:" + player + "Win!!!")
-            alert("黑方赢！！！")
-            InitBoard()
-            // RenderBoard()
-        }
+        //     console.log("Player:" + player + "Win!!!")
+        //     alert("黑方赢！！！")
+        //     InitBoard()
+        //     // RenderBoard()
+        // }
     } else if (player == 2) {
 
         boardData[row][col] = 2
@@ -82,32 +82,32 @@ function handleCellClick(event) {
                 "x": col, "y": row  //x,y坐标和行列是相反的
             }
         }
-        
+
         chessManuals.push(chessManual)
 
-        if (checkWin(player, row, col)) {
+        // if (checkWin(player, row, col)) {
 
-            console.log("Player:" + player + "Win!!!")
-            alert("白方赢！！！")
-            InitBoard()
-            // RenderBoard()
-        }
+        //     console.log("Player:" + player + "Win!!!")
+        //     alert("白方赢！！！")
+        //     InitBoard()
+        //     // RenderBoard()
+        // }
     }
     // RenderBoard()
     data = {
         // userID:userID,
-        roomID:roomID,
-        player:player,
-        row:row,
-        col:col,
+        roomID: roomID,
+        player: player,
+        row: row,
+        col: col,
     }
-    socketio.emit("fallChess",data)
-    
+    socketio.emit("fallChess", data)
+
     isPlay = 0
-    console.log(boardData)
-    console.log(chessManuals)
+    // console.log(boardData)
+    // console.log(chessManuals)
 }
-function SendAndReceive(){
+function SendAndReceive() {
     socketio.emit()
 }
 function chooseBlock(event) {
@@ -247,44 +247,63 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(roomID)
     userID = localStorage.getItem('user_id');
     data = {
-        roomID:roomID,
-        userID:userID
+        roomID: roomID,
+        userID: userID
     }
-    socketio = io('http://10.12.112.166:99/');
-    socketio.emit("joinRoom",data)
-    socketio.on("joinRoom_success", (res) => {
-        if(userID == res.player1){
+    socketio = io('http://127.0.0.1:5000/');
+    socketio.emit("joinRoom", data)
+    socketio.on("joinRoom_success" + roomID, (res) => {
+        if (userID == res.player1) {
             player = 1
-        }else if(userID = res.player2){
+        } else if (userID = res.player2) {
             player = 2
         }
         console.log(player)
         if (res.state == 1) {
             isStart = true
             RenderBoard()
-            if(player == 1){
+            if (player == 1) {
                 isPlay = 1
             }
             StatusChecking()
-            console.log("isPlay:"+isPlay)
-            socketio.on("fallChess_success",res1=>{
-                
+            console.log("isPlay:" + isPlay)
+            socketio.on("fallChess_success" + roomID, res1 => {
+
                 var row = res1.row;
                 var col = res1.col;
                 var playerType = res1.player
-                if(playerType == 1 && player == 2){
+                if (playerType == 1 && player == 2) {
                     isPlay = 1;
-                }else if(playerType == 2 && player == 1){
+                } else if (playerType == 2 && player == 1) {
                     isPlay = 1;
-                }else if(playerType == 1 && player == 1){
+                } else if (playerType == 1 && player == 1) {
                     isPlay = 0;
-                }else if(playerType == 2 && player == 2){
+                } else if (playerType == 2 && player == 2) {
                     isPlay = 0;
                 }
-                console.log("fallChess_success isPlay"+isPlay)
+                console.log("fallChess_success isPlay" + isPlay)
                 StatusChecking();
                 boardData[row][col] = playerType
                 RenderBoard();
+                var sendData = {
+                    row: row,
+                    col: col,
+                    player: player,
+                    roomID: roomID,
+                    board_data: boardData,
+                }
+                socketio.emit("checkWin", sendData)
+                socketio.on("Win" + roomID, res2 => {
+                    if (res2.winer == 1 && player == 1) {
+                        document.getElementById('boardPad').innerHTML = "<h1>黑方胜利，白方失败，你赢了</h1>";
+                    } else if (res2.winer == 2 && player == 2) {
+                        document.getElementById('boardPad').innerHTML = "<h1>白方胜利，黑方失败，你赢了</h1>";
+                    } else if (res2.winer == 2 && player == 1) {
+                        document.getElementById('boardPad').innerHTML = "<h1>白方胜利，黑方失败，你输了</h1>";
+                    } else if (res2.winer == 1 && player == 2) {
+                        document.getElementById('boardPad').innerHTML = "<h1>黑方胜利，白方失败，你输了</h1>";
+                    }
+                })
             })
         } else {
             isStart = false
@@ -292,11 +311,65 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 });
+
+function CreateRepentanceBox() {
+    //生成悔棋提示框
+    var main = document.getElementById("main")
+    var messageBox = document.createElement("div")
+    messageBox.classList.add("messageBox")
+
+    var msgTitle = document.createElement("div")
+    msgTitle.classList.add("msgTitle")
+    msgTitle.innerHTML = "<h2>提示</h2>"
+
+    var msg = document.createElement("div")
+    msg.classList.add("msg")
+    var msgContent = document.createElement("span")
+    msgContent.classList.add("msgContent")
+    msgContent.innerText = "对方请求悔棋，你是否同意？"
+    msg.appendChild(msgContent)
+
+    var msgAction = document.createElement("div")
+    msgAction.classList.add("msgAction")
+
+    var msgBut1 = document.createElement("div")
+    msgBut1.classList.add("msgBut")
+    msgBut1.innerHTML = " <span>是</span>"
+    var msgBut2 = document.createElement("div")
+    msgBut2.classList.add("msgBut")
+    msgBut2.innerHTML = " <span>否</span>"
+
+    msgAction.appendChild(msgBut1)
+    msgAction.appendChild(msgBut2)
+
+    messageBox.appendChild(msgTitle)
+    messageBox.appendChild(msg)
+    messageBox.appendChild(msgAction)
+
+    main.appendChild(messageBox)
+}
+
+function repentance() {
+    
+}
+function peace() {
+
+}
+function admitDefeat() {
+
+}
 function addClick() {
     const index = document.getElementById("indexPage")
     index.addEventListener("click", function () {
         window.location.href = "/";
     })
+    document.getElementById("roomListPage").addEventListener("click", function () {
+        window.location.href = "/roomList";
+    })
+    document.getElementById("repentance").addEventListener("click", repentance)
+    document.getElementById("peace").addEventListener("click", peace)
+    document.getElementById("admitDefeat").addEventListener("click", admitDefeat)
+
 }
 addClick()
 InitBoard()

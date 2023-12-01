@@ -15,7 +15,7 @@
     <div id="header">
         <div class="NavBox">
            <div class="navItem" id="indexPage"><span>首页</span></div>
-           <div class="navItem"><span>房间列表</span></div>
+           <div class="navItem" id="roomListPage"><span>房间列表</span></div>
            <div class="navItem"><span>关于</span></div>
         </div>
        <div class="UserBox">
@@ -49,12 +49,28 @@
             <div class="isPlayChess">
                 <div class="tipText">操作</div>
                 <div class="tipButBox">
-                    <div class="tipBut" data-isplaychess="0" onclick="RetractChess()">悔棋</div>
-                    <div class="tipBut" data-isplaychess="1" onclick="testF()" >求和</div>
-                    <div class="tipBut" data-isplaychess="2" onclick="send()">认输</div>
+                    <div class="tipBut" data-isplaychess="0" id="repentance">悔棋</div>
+                    <div class="tipBut" data-isplaychess="1" id="peace">求和</div>
+                    <div class="tipBut" data-isplaychess="2" id="admitDefeat">认输</div>
                 </div>
             </div>
         </div>
+        <!-- <div class="messageBox" id="messageBox">
+            <div class="msgTitle">
+                <h2>提示</h2>
+            </div>
+            <div class="msg">
+                <span class="msgContent">对方请求悔棋，你是否同意？</span>
+            </div>
+            <div class="msgAction">
+                <div class="msgBut">
+                    <span>是</span>
+                </div>
+                <div class="msgBut">
+                    <span>否</span>
+                </div>
+            </div>
+        </div> -->
     </div>
 
     <script src="../static/js/gamePvP.js"></script>

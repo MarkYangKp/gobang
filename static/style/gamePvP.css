@@ -18,7 +18,7 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     width: 580px;
-    border:solid 2px black; 
+    border: solid 2px black;
     justify-content: center;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -70,12 +70,14 @@ body {
     left: 50%;
     transform: translateX(-50%);
 }
-.cell-enter{
+
+.cell-enter {
     position: relative;
     width: 26px;
     height: 26px;
     border: solid 2px red;
 }
+
 .cell-enter::after {
     content: "";
     position: absolute;
@@ -86,6 +88,7 @@ body {
     transform: translateY(-50%);
     background-color: black;
 }
+
 .cell-enter::before {
     content: "";
     position: absolute;
@@ -96,6 +99,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
 }
+
 .isPlayChess {
     display: flex;
     flex-direction: column;
@@ -131,21 +135,64 @@ body {
     border-radius: 5px;
     text-align: center;
 }
-.userBox{
+
+.userBox {
     display: flex;
     flex-direction: column;
 }
-.userInfo{
+
+.userInfo {
     display: flex;
     flex-direction: row;
     width: 150px;
-    box-shadow: 0 0 3px rgba(0, 0, 0.5); 
+    box-shadow: 0 0 3px rgba(0, 0, 0.5);
     padding: 10px;
     border-radius: 5px;
 }
-.await{
+
+.await {
     background-color: red;
 }
-.play{
+
+.play {
     background-color: forestgreen;
+}
+
+.messageBox {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 200px;
+    /* padding: 30px; */
+    /* justify-content: center; */
+    align-items: center;
+    background-color: antiquewhite;
+}
+
+.msgAction {
+    display: flex;
+    flex-direction: row;
+}
+
+.msgBut {
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0.5);
+}
+
+.msgBut:hover {
+    box-shadow: 0 0 3px rgba(0, 0, 0.5);
+}
+
+.msgBut:active {
+    box-shadow: 0 0 0px rgba(0, 0, 0.5);
 }

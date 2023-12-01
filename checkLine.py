@@ -1,76 +1,43 @@
-# BEGIN: check_win
-def check_win(board, row, col):
+def check_win(player, row, col, board_data):
+    
     # 检查水平方向
-    count = 1
-    for i in range(col-1, -1, -1):
-        if board[row][i] == board[row][col]:
+    count = 0
+    for i in range(col - 4, col + 5):
+        if 0 <= i < 19 and board_data[row][i] == player:
             count += 1
+            if count == 5:
+                return True
         else:
-            break
-    for i in range(col+1, len(board[0])):
-        if board[row][i] == board[row][col]:
-            count += 1
-        else:
-            break
-    if count >= 5:
-        return board[row][col]
+            count = 0
 
     # 检查垂直方向
-    count = 1
-    for i in range(row-1, -1, -1):
-        if board[i][col] == board[row][col]:
+    count = 0
+    for i in range(row - 4, row + 5):
+        if 0 <= i < 19 and board_data[i][col] == player:
             count += 1
+            if count == 5:
+                return True
         else:
-            break
-    for i in range(row+1, len(board)):
-        if board[i][col] == board[row][col]:
-            count += 1
-        else:
-            break
-    if count >= 5:
-        return board[row][col]
+            count = 0
 
-    # 检查左上到右下方向
-    count = 1
-    i, j = row-1, col-1
-    while i >= 0 and j >= 0:
-        if board[i][j] == board[row][col]:
+    # 检查主对角线
+    count = 0
+    for i, j in zip(range(row - 4, row + 5), range(col - 4, col + 5)):
+        if 0 <= i < 19 and 0 <= j < 19 and board_data[i][j] == player:
             count += 1
+            if count == 5:
+                return True
         else:
-            break
-        i -= 1
-        j -= 1
-    i, j = row+1, col+1
-    while i < len(board) and j < len(board[0]):
-        if board[i][j] == board[row][col]:
-            count += 1
-        else:
-            break
-        i += 1
-        j += 1
-    if count >= 5:
-        return board[row][col]
+            count = 0
 
-    # 检查右上到左下方向
-    count = 1
-    i, j = row-1, col+1
-    while i >= 0 and j < len(board[0]):
-        if board[i][j] == board[row][col]:
+    # 检查副对角线
+    count = 0
+    for i, j in zip(range(row - 4, row + 5), range(col + 4, col - 5, -1)):
+        if 0 <= i < 19 and 0 <= j < 19 and board_data[i][j] == player:
             count += 1
+            if count == 5:
+                return True
         else:
-            break
-        i -= 1
-        j += 1
-    i, j = row+1, col-1
-    while i < len(board) and j >= 0:
-        if board[i][j] == board[row][col]:
-            count += 1
-        else:
-            break
-        i += 1
-        j -= 1
-    if count >= 5:
-        return board[row][col]
+            count = 0
 
-    return 0
-# END: check_win
+    return False
