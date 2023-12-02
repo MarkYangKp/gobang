@@ -173,7 +173,11 @@ body {
     align-items: center;
     background-color: antiquewhite;
 }
-
+.msg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .msgAction {
     display: flex;
     flex-direction: row;
@@ -195,4 +199,11 @@ body {
 
 .msgBut:active {
     box-shadow: 0 0 0px rgba(0, 0, 0.5);
+}
+.AgainBox{
+    z-index: 10;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
 }
