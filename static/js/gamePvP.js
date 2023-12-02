@@ -325,6 +325,44 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 });
 
+//生成再来一局提示框
+function CreateAgainBox(contentText)
+{
+    
+
+    var msg = document.createElement("div")
+    msg.classList.add("msg")
+    var msgContent = document.createElement("span")
+    msgContent.classList.add("msgContent")
+    msgContent.innerText = contentText
+    msg.appendChild(msgContent)
+
+    var AgainBox = document.createElement("div")
+    AgainBox.classList.add("msgAction")
+
+    var msgBut1 = document.createElement("div")
+    msgBut1.classList.add("msgBut")
+    msgBut1.innerHTML = " <span>是</span>"
+    msgBut1.dataset.isaccept = "1"
+    msgBut1.addEventListener("click",AcceptRepentance)
+    var msgBut2 = document.createElement("div")
+    msgBut2.classList.add("msgBut")
+    msgBut2.innerHTML = " <span>否</span>"
+    msgBut2.dataset.isaccept = "0"
+    msgBut2.addEventListener("click",AcceptRepentance)
+
+    AgainBox.appendChild(msgBut1)
+    AgainBox.appendChild(msgBut2)
+
+    messageBox.appendChild(msgTitle)
+    messageBox.appendChild(msg)
+    
+    messageBox.appendChild(msgAction)
+    
+
+
+}
+
 //生成悔棋提示框
 function CreateMessageBox(contentText,isShowBut) {
     
