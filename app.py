@@ -135,5 +135,20 @@ def AcceptRepentance(data):
         emit("RepentanceResult"+roomID,{"result":1},broadcast=True)
     else:
         emit("RepentanceResult"+roomID,{"result":0},broadcast=True)
+
+@socketio.on('AdmitDefeat')
+def AdmitDefeat(data):
+    roomID = data['roomID']
+    player = data['player']
+    emit("AdmitDefeat"+roomID,{"player":player},broadcast=True)
+
+@socketio.on('AgainGame')
+def AgainGame(data):
+    roomID = data['roomID']
+    player = data['player']
+    isAgain = data['isAgain']
+    emit("AgainGame"+roomID,{"player":player, "isAgain":isAgain},broadcast=True)
+
+
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0",port=5000)
