@@ -58,13 +58,13 @@ function handleCellClick(event) {
     if (player == 1) {
 
         boardData[row][col] = 1
-        chessManual = {
-            "userType": player,
-            "pos": {
-                "x": col, "y": row  //x,y坐标和行列是相反的
-            }
-        }
-        chessManuals.push(chessManual)
+        // chessManual = {
+        //     "userType": player,
+        //     "pos": {
+        //         "x": col, "y": row  //x,y坐标和行列是相反的
+        //     }
+        // }
+        // chessManuals.push(chessManual)
         // RenderBoard()
         // if (checkWin(player, row, col)) {
 
@@ -76,14 +76,14 @@ function handleCellClick(event) {
     } else if (player == 2) {
 
         boardData[row][col] = 2
-        chessManual = {
-            "userType": player,
-            "pos": {
-                "x": col, "y": row  //x,y坐标和行列是相反的
-            }
-        }
+        // chessManual = {
+        //     "userType": player,
+        //     "pos": {
+        //         "x": col, "y": row  //x,y坐标和行列是相反的
+        //     }
+        // }
 
-        chessManuals.push(chessManual)
+        // chessManuals.push(chessManual)
 
         // if (checkWin(player, row, col)) {
 
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
         roomID: roomID,
         userID: userID
     }
-    socketio = io('http://127.0.0.1:5000/');
+    socketio = io('http://10.12.112.166:99/');
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
         if (userID == res.player1) {
@@ -285,6 +285,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 StatusChecking();
                 boardData[row][col] = playerType
                 RenderBoard();
+
+                chessManual = {
+                    "userType": playerType,
+                    "pos": {
+                        "x": col, "y": row  //x,y坐标和行列是相反的
+                    }
+                }
+        
+                chessManuals.push(chessManual)
+
                 var sendData = {
                     row: row,
                     col: col,
@@ -305,19 +315,23 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 })
             })
+            IsRepentance()
         } else {
             isStart = false
             document.getElementById('boardPad').innerHTML = "<h1>等待中，未开始</h1>";
         }
+
+        
     })
 });
 
-function CreateRepentanceBox() {
-    //生成悔棋提示框
+//生成悔棋提示框
+function CreateMessageBox(contentText,isShowBut) {
+    
     var main = document.getElementById("main")
     var messageBox = document.createElement("div")
     messageBox.classList.add("messageBox")
-
+    messageBox.setAttribute("id","messageBox")
     var msgTitle = document.createElement("div")
     msgTitle.classList.add("msgTitle")
     msgTitle.innerHTML = "<h2>提示</h2>"
@@ -326,7 +340,7 @@ function CreateRepentanceBox() {
     msg.classList.add("msg")
     var msgContent = document.createElement("span")
     msgContent.classList.add("msgContent")
-    msgContent.innerText = "对方请求悔棋，你是否同意？"
+    msgContent.innerText = contentText
     msg.appendChild(msgContent)
 
     var msgAction = document.createElement("div")
@@ -335,29 +349,90 @@ function CreateRepentanceBox() {
     var msgBut1 = document.createElement("div")
     msgBut1.classList.add("msgBut")
     msgBut1.innerHTML = " <span>是</span>"
+    msgBut1.dataset.isaccept = "1"
+    msgBut1.addEventListener("click",AcceptRepentance)
     var msgBut2 = document.createElement("div")
     msgBut2.classList.add("msgBut")
     msgBut2.innerHTML = " <span>否</span>"
+    msgBut2.dataset.isaccept = "0"
+    msgBut2.addEventListener("click",AcceptRepentance)
 
     msgAction.appendChild(msgBut1)
     msgAction.appendChild(msgBut2)
 
     messageBox.appendChild(msgTitle)
     messageBox.appendChild(msg)
-    messageBox.appendChild(msgAction)
+    if(isShowBut){
+        messageBox.appendChild(msgAction)
+    }
 
     main.appendChild(messageBox)
 }
 
 function repentance() {
+    data = {
+        roomID:roomID,
+        player:player,
+        // boardData:boardData,
+    }
+    socketio.emit("repentance",data)
     
 }
+//订阅悔棋
+function IsRepentance(){
+    socketio.on("IsRepentance"+roomID,res=>{
+        if(player != res.player){
+            console.log("对方请求悔棋，您是否同意")
+            CreateMessageBox("对方请求悔棋，您是否同意",true)
+            socketio.on("RepentanceResult"+roomID,res1=>{
+                if(res1.result == 1){ //同意悔棋
+                    RetractChess()
+                    document.getElementById("messageBox").remove();
+                }else{ //不同意悔棋
+                    RenderBoard()
+                    document.getElementById("messageBox").remove();
+                }
+                
+                socketio.off("RepentanceResult"+roomID)
+            })
+        }else{
+            console.log("正在等待对方回应，请稍后")
+            CreateMessageBox("正在等待对方回应，请稍后")
+            socketio.on("RepentanceResult"+roomID,res2=>{
+                if(res2.result == 1){ //同意悔棋
+                    RetractChess()
+                    document.getElementById("messageBox").remove();
+                }else{ //不同意悔棋
+                    RenderBoard()
+                    document.getElementById("messageBox").remove();
+                }
+                
+                socketio.off("RepentanceResult"+roomID)
+            })
+        }
+    })
+}
+//是否同意悔棋
+function AcceptRepentance(e)
+{
+    var isAccept = e.target.dataset.isaccept
+    console.log(isAccept)
+    data = {
+        roomID:roomID,
+        player:player,
+        isAccept:isAccept
+    }
+    socketio.emit("AcceptRepentance",data)
+}
+
+
 function peace() {
 
 }
 function admitDefeat() {
 
 }
+
 function addClick() {
     const index = document.getElementById("indexPage")
     index.addEventListener("click", function () {
@@ -371,6 +446,7 @@ function addClick() {
     document.getElementById("admitDefeat").addEventListener("click", admitDefeat)
 
 }
+
 addClick()
 InitBoard()
 RenderBoard()

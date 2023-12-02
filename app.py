@@ -120,8 +120,20 @@ def CheckWin(data):
 @socketio.on('repentance')
 def repentance(data):
     roomID = data['roomID']
-    emit('repentance_success', room=roomID)
+    player = data['player']
+    emit('IsRepentance'+roomID,{"roomID":roomID,"player":player},broadcast=True)
 
-
+#确认同意悔棋
+@socketio.on('AcceptRepentance')
+def AcceptRepentance(data):
+    print(data)
+    roomID = data['roomID']
+    player = data['player']
+    isAccept = data['isAccept']
+    print(type(isAccept))
+    if(isAccept == "1"):
+        emit("RepentanceResult"+roomID,{"result":1},broadcast=True)
+    else:
+        emit("RepentanceResult"+roomID,{"result":0},broadcast=True)
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0",port=5000)
