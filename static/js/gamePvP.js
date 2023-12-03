@@ -611,7 +611,7 @@ function admitDefeat() {
     socketio.emit("AdmitDefeat",data)
 }
 //订阅认输
-function SubscriptAdmitDefeat(){
+function SubscriptAdmitDefeat(){ 
     socketio.on("AdmitDefeat"+roomID,res=>{
         if (res.player != player) {
             document.getElementById("boardPad").innerHTML = ""
@@ -624,7 +624,7 @@ function SubscriptAdmitDefeat(){
             SubscriptAgain()
         }
 
-        socketio.off("AdmitDefeat"+roomID)
+        // socketio.off("AdmitDefeat"+roomID)
     })
 }
 

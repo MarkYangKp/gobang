@@ -151,9 +151,11 @@ def AgainGame(data):
     if isAgain == "1":
         if roomID not in shareData.isAgainGame:
             shareData.isAgainGame[roomID] = []
-            shareData.isAgainGame[roomID].append(userID)
+            if userID not in shareData.isAgainGame[roomID]:
+                shareData.isAgainGame[roomID].append(userID)
         else:
-            shareData.isAgainGame[roomID].append(userID)
+            if userID not in shareData.isAgainGame[roomID]:
+                shareData.isAgainGame[roomID].append(userID)
         print(shareData.isAgainGame)
 
     if len(shareData.isAgainGame[roomID]) == 2:
