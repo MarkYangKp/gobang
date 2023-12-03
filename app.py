@@ -150,5 +150,16 @@ def AgainGame(data):
     emit("AgainGame"+roomID,{"player":player, "isAgain":isAgain},broadcast=True)
 
 
+@socketio.on('AcceptDraw')
+def AcceptDraw(data):
+    roomID = data['roomID']
+    player = data['player']
+    isAccept = data['isAccept']
+    if(isAccept == "1"):
+        emit("DrawResult"+roomID,{"result":1},broadcast=True)
+    else:
+        emit("DrawResult"+roomID,{"result":0},broadcast=True)
+
+
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0",port=5000)
