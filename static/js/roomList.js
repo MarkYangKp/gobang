@@ -88,7 +88,7 @@ function createRoom() {
     socket.emit("newRoom", data);
 }
 document.addEventListener("DOMContentLoaded", function() {
-    socket = io('http://10.12.112.166:99/');
+    socket = io('http://127.0.0.1:5000/');
     socket.emit("roomList");
     socket.on("room_list", (res) => {
         console.log(res)
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 });
 function getRoomList() {
-    socket = io('http://10.12.112.166:99/');
+    socket = io('http://127.0.0.1:5000/');
     socket.on("connect", (res) => {
         console.log("连接成功")
         

@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import random
 from checkLine import check_win
-
+import shareData
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 
@@ -99,11 +99,12 @@ def joinRoom(data):
 @socketio.on('fallChess')
 def fallChess(data):
     print(data)
+    shareData.data.append(data)
     roomID = data['roomID']
     col = data['col']
     row = data['row']
     player = data['player']
-    emit('fallChess_success'+roomID, {'col': col, 'row': row, 'player': player,'roomID':roomID},broadcast=True)
+    emit('fallChess_success'+roomID, {'col': col, 'row': row, 'player': player,'roomID':roomID,'shareData':shareData.data},broadcast=True)
     #可以加一个存储棋步到数据库的操作
     
 @socketio.on('checkWin')
@@ -116,7 +117,7 @@ def CheckWin(data):
     board_data = data['board_data']
     if check_win(player,row,col,board_data):
         emit('Win'+roomID,{'winer':player,'roomID':roomID,'status':1},broadcast=True)
-
+# 进行悔棋
 @socketio.on('repentance')
 def repentance(data):
     roomID = data['roomID']
@@ -145,10 +146,38 @@ def AdmitDefeat(data):
 @socketio.on('AgainGame')
 def AgainGame(data):
     roomID = data['roomID']
-    player = data['player']
+    userID = data['userID']
     isAgain = data['isAgain']
-    emit("AgainGame"+roomID,{"player":player, "isAgain":isAgain},broadcast=True)
+    if isAgain == "1":
+        if roomID not in shareData.isAgainGame:
+            shareData.isAgainGame[roomID] = []
+            shareData.isAgainGame[roomID].append(userID)
+        else:
+            shareData.isAgainGame[roomID].append(userID)
+        print(shareData.isAgainGame)
 
+    if len(shareData.isAgainGame[roomID]) == 2:
+        emit("AgainGame"+roomID,{"againGame":1, "isAgain":isAgain},broadcast=True)
+        shareData.isAgainGame[roomID] = []
+    else:
+        emit("AgainGame"+roomID,{"againGame":0, "isAgain":isAgain},broadcast=True)
+@socketio.on("Peace")
+def Peace(data):
+    roomID = data['roomID']
+    player = data['player']
+    emit('Peace'+roomID,{"roomID":roomID,"player":player},broadcast=True) 
+#确认求和
+@socketio.on('AcceptPeace')
+def AcceptPeace(data):
+    print(data)
+    roomID = data['roomID']
+    player = data['player']
+    isAccept = data['isAccept']
+    print(type(isAccept))
+    if(isAccept == "1"):
+        emit("AcceptPeace"+roomID,{"result":1},broadcast=True)
+    else:
+        emit("AcceptPeace"+roomID,{"result":0},broadcast=True)
 
 @socketio.on('AcceptDraw')
 def AcceptDraw(data):
