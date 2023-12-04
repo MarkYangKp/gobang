@@ -1,3 +1,4 @@
+const BackUrl = 'http://115.159.211.13:5001'
 //棋盘数据  0 为空 1为黑 2为白
 var boardData = [[]];
 //记录棋谱
@@ -250,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
         roomID: roomID,
         userID: userID
     }
-    socketio = io('http://127.0.0.1:5000/');
+    socketio = io(BackUrl);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
         if (userID == res.player1) {

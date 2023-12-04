@@ -1,3 +1,4 @@
+const BackUrl = 'http://115.159.211.13:5001'
 function createRoomItem(roomID, blackPlayer, whitePlayer) {
     // 创建各个元素
     var roomItem = document.createElement('div');
@@ -88,7 +89,7 @@ function createRoom() {
     socket.emit("newRoom", data);
 }
 document.addEventListener("DOMContentLoaded", function() {
-    socket = io('http://127.0.0.1:5000/');
+    socket = io(BackUrl);
     socket.emit("roomList");
     socket.on("room_list", (res) => {
         console.log(res)
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 });
 function getRoomList() {
-    socket = io('http://127.0.0.1:5000/');
+    socket = io(BackUrl);
     socket.on("connect", (res) => {
         console.log("连接成功")
         

@@ -4,6 +4,7 @@
         "win":12,
         "fail":5,
         "peace":3,
-        "score":131
+        "score":131,
+        "nickname":"小明"
     }
 ]
