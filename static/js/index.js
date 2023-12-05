@@ -1,16 +1,27 @@
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.getElementById("SetNameButton").addEventListener("click", SetName)
+    document.getElementById("SetName-exit").addEventListener("click", HiedSetNameBox)
+})
+
 // const outils = require("./outils.min.js")
 var userID = undefined
 function modelCheck(e) {
-    console.log(e);
-    var model = e.target.dataset.model;
-    console.log(model);
-    // var OS = outils.getOS()
-    // console.log(OS)
-    if (model == "pvp") {
-        window.location.href = "roomList?userID=" + userID;
-    } else if (model == "pve") {
-        window.location.href = "gamePvE?userID=" + userID;
+    if(IsSetName()){
+        console.log(e);
+        var model = e.target.dataset.model;
+        console.log(model);
+        // var OS = outils.getOS()
+        // console.log(OS)
+        if (model == "pvp") {
+            window.location.href = "roomList?userID=" + userID;
+        } else if (model == "pve") {
+            window.location.href = "gamePvE?userID=" + userID;
+        }
+    }else{
+        showSetNameBox()
     }
+    
 
     //qdqwdqd
 }
@@ -23,13 +34,79 @@ function SetUserID() {
     return userID
 }
 
-function GetUserID()
-{
+//是否设置昵称
+function IsSetName() {
+    // 从localStorage获取用户name
+    var userName = localStorage.getItem('user_name');
+    if (userName == undefined || userName == null || userName =="") {
+        return false
+    } else {
+        return true
+    }
+}
+
+function showSetNameBox() {
+    document.getElementById("SetNameBox").style.display = "flex"
+    document.getElementById("overlay").style.display = "block"
+}
+function HiedSetNameBox() {
+    document.getElementById("SetNameBox").style.display = "none"
+    document.getElementById("overlay").style.display = "none"
+}
+function SetName(e) {
+    var inputBox = document.getElementById("inputBox")
+
+    if (inputBox.value == "") {
+        inputBox.placeholder = "请输入昵称"
+    } else {
+        var userName = inputBox.value
+        localStorage.setItem('user_name', userName);
+        // 定义请求的URL
+        const url = 'http://127.0.0.1:5000/setusername';
+
+        // 构建要发送的数据
+        const data = {
+            userID: userID,
+            userName: userName
+        };
+
+        // 发起POST请求
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // 根据实际情况设置请求头
+            },
+            body: JSON.stringify(data) // 将数据转换为JSON字符串
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 处理响应数据
+                console.log(data);
+                if(data.code == 1){
+                    HiedSetNameBox()
+                }
+            })
+            .catch(error => {
+                // 处理错误
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+
+        inputBox.value = ""
+    }
+}
+
+function GetUserID() {
     // 从localStorage获取用户ID
     userID = localStorage.getItem('user_id');
-    if(userID==null){
+    if (userID == null) {
         userID = SetUserID()
     }
 }
+
 
 GetUserID()

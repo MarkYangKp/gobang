@@ -26,6 +26,18 @@
             </div>
         </div>
     </div>
+    <div class="SetName" id="SetNameBox">
+        <div class="SetName-title"><span>您是谁？</span></div>
+        <div class="SetName-inputBox">
+            <input placeholder="昵称" value="" id="inputBox" class="inputBox"/>
+        </div>
+        <div class="SetNameButton" ><div id="SetNameButton" >继续</div></div>
+        <div class="exitBox">
+            <div class="SetName-exit" id="SetName-exit"></div>
+        </div>
+        
+    </div>
+    <div id="overlay"></div>
     <div id="main">
         <div class="main-item">
             <div class="item-item">
@@ -45,6 +57,9 @@
 
             </div>
         </div>
+        
+        
+        
         <div class="main-item1">
             <h2>排行榜</h2>
             <div class="rankBox">
@@ -53,66 +68,15 @@
                 <div class="rankBox-item"><span>胜</span>/<span>败</span>/<span>平</span></div>
                 <div class="rankBox-item"><span>得分</span></div> 
             </div>
+            
+            {% for item in rankData %}
             <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
+                <div class="rankBox-item"><span>{{loop.index}}</span></div>
+                <div class="rankBox-item"><span>{{item.userName}}</span></div>
+                <div class="rankBox-item"><span>{{item.win}}</span>/<span>{{item.peace}}</span>/<span>{{item.fail}}</span></div>
+                <div class="rankBox-item"><span>{{item.score}}</span></div>
             </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
-            <div class="rankBox">
-                <div class="rankBox-item"><span>1.</span></div>
-                <div class="rankBox-item"><span>Mark</span></div>
-                <div class="rankBox-item"><span>100</span>/<span>200</span>/<span>100</span></div>
-                <div class="rankBox-item"><span>2000</span></div>
-            </div>
+            {% endfor %}
         </div>
         
     </div>

@@ -1,10 +1,1 @@
-[
-    {
-        "userID":123456,
-        "win":12,
-        "fail":5,
-        "peace":3,
-        "score":131,
-        "nickname":"小明"
-    }
-]
+[{"userID": 123456, "win": 55, "fail": 5, "peace": 3, "score": 1321, "userName": "Mark"}, {"userID": 123456, "win": 12, "fail": 3, "peace": 4, "score": 1311, "userName": "\u5c0f\u660e"}, {"userID": 123456, "win": 12, "fail": 5, "peace": 3, "score": 1131, "userName": "\u5c0f\u660e"}, {"userID": 333444, "win": 25, "fail": 2, "peace": 7, "score": 210, "userName": "\u5e7b\u6708"}, {"userID": 161718, "win": 23, "fail": 5, "peace": 4, "score": 200, "userName": "\u7d2b\u971e"}, {"userID": 222223, "win": 21, "fail": 4, "peace": 6, "score": 190, "userName": "\u98ce\u534e"}, {"userID": 456789, "win": 20, "fail": 3, "peace": 8, "score": 185, "userName": "EtherealBladeMaster"}, {"userID": 777888, "win": 22, "fail": 4, "peace": 3, "score": 180, "userName": "\u661f\u8fb0"}, {"userID": 131415, "win": 19, "fail": 3, "peace": 8, "score": 170, "userName": "\u5bd2\u6885"}, {"userID": 101112, "win": 16, "fail": 7, "peace": 3, "score": 160, "userName": "\u96e8\u843d"}, {"userID": 192021, "win": 17, "fail": 6, "peace": 5, "score": 155, "userName": "\u4e91\u6de1"}, {"userID": 111222, "win": 18, "fail": 6, "peace": 4, "score": 150, "userName": "\u68a6\u8776"}, {"userID": 999000, "win": 14, "fail": 5, "peace": 5, "score": 140, "userName": "\u6e05\u98ce"}, {"userID": 123456, "win": 12, "fail": 5, "peace": 3, "score": 131, "userName": "\u5c0f\u660e"}, {"userID": 123456, "win": 12, "fail": 5, "peace": 3, "score": 131, "userName": "\u5c0f\u660e"}, {"userID": 555666, "win": 12, "fail": 8, "peace": 6, "score": 130, "userName": "\u79cb\u6c34"}, {"userID": 567890, "win": 15, "fail": 10, "peace": 5, "score": 120, "userName": "LunarSpecter"}, {"userID": 789012, "win": 8, "fail": 7, "peace": 2, "score": 96, "userName": "ShadowPhoenix"}, {"userID": "642022", "win": 0, "fail": 0, "peace": 0, "score": 0, "userName": "\u4e07\u5c81\u7237"}, {"userID": "642022", "win": 0, "fail": 0, "peace": 0, "score": 0, "userName": "test"}, {"userID": "431500", "win": 0, "fail": 0, "peace": 0, "score": 0, "userName": "ykp"}]

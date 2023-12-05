@@ -1,19 +1,50 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,request
 from flask_socketio import SocketIO, emit
 import random
 from checkLine import check_win
 import shareData
+import json
+from appInit import GetUsersInfo
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 
 socketio = SocketIO(app, cors_allowed_origins='*')
 
-@app.route("/")
+
+
+@app.route("/",methods=['GET', 'POST'])
 def index():
-    return render_template("index.html")
+    data = GetUsersInfo()
+    return render_template("index.html",rankData=data)
 
+@app.route("/setusername",methods=["POST"])
+def SetUserName():
+    if request.method == "GET":
+        return None
+    data = request.json
+    print(data)
 
+    try:
+        usersInfo = GetUsersInfo()
+        userInfo = {
+            "userID": data['userID'],
+            "win": 0,
+            "fail": 0,
+            "peace": 0,
+            "score": 0,
+            "userName": data['userName']
+        }
+        usersInfo.append(userInfo)
+        with open('userData.json', 'w',encoding="utf8") as file:
+            file.write(json.dumps(usersInfo))
+        return {
+            "code":1
+        }
+    except:
+        print("未知错误")
+    
 
 @app.route("/roomList")
 def showRoomList():
