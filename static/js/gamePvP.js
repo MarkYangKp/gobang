@@ -59,6 +59,7 @@ function handleCellClick(event) {
     if (player == 1) {
 
         boardData[row][col] = 1
+        PlayMusic("failChess")
         // chessManual = {
         //     "userType": player,
         //     "pos": {
@@ -77,6 +78,7 @@ function handleCellClick(event) {
     } else if (player == 2) {
 
         boardData[row][col] = 2
+        PlayMusic("failChess")
         // chessManual = {
         //     "userType": player,
         //     "pos": {
@@ -309,11 +311,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 socketio.emit("checkWin", sendData)
                 socketio.on("Win" + roomID, res2 => {
                     if (res2.winer == player) {
+                        PlayMusic("winGame")
                         document.getElementById("boardPad").innerHTML = ""
                         document.getElementById("boardPad").appendChild(CreateAgainBox("恭喜你取得胜利", isAgain))
 
                         SubscriptAgain()
                     } else {
+                        PlayMusic("failedGame")
                         document.getElementById("boardPad").innerHTML = ""
                         document.getElementById("boardPad").appendChild(CreateAgainBox("很遗憾你输了", isAgain))
                         SubscriptAgain()
@@ -644,6 +648,24 @@ function addClick() {
     document.getElementById("peace").addEventListener("click", peace)
     document.getElementById("admitDefeat").addEventListener("click", admitDefeat)
 
+}
+
+
+function PlayMusic(musicType) {
+    // 创建音频上下文
+    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // 创建音频元素
+    var audioElement = new Audio('/static/music/'+musicType+".mp3");
+
+    // 创建音频源
+    var audioSource = audioContext.createMediaElementSource(audioElement);
+
+    // 将音频源连接到音频上下文
+    audioSource.connect(audioContext.destination);
+
+    // 播放音乐
+    audioElement.play();
 }
 
 addClick()

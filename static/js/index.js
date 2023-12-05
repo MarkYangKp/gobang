@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-
+    const userName =  IsSetName()
+    if(userName){
+        document.getElementById("userNameSpan").innerText = userName
+    }else{
+        document.getElementById("userNameSpan").innerText  = "无名小卒"
+    }
     document.getElementById("SetNameButton").addEventListener("click", SetName)
     document.getElementById("SetName-exit").addEventListener("click", HiedSetNameBox)
 })
@@ -41,7 +46,7 @@ function IsSetName() {
     if (userName == undefined || userName == null || userName =="") {
         return false
     } else {
-        return true
+        return userName
     }
 }
 
@@ -88,7 +93,9 @@ function SetName(e) {
                 // 处理响应数据
                 console.log(data);
                 if(data.code == 1){
+                    document.getElementById("userNameSpan").innerText = userName
                     HiedSetNameBox()
+                    window.location.href = "/"
                 }
             })
             .catch(error => {
