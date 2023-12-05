@@ -1,6 +1,7 @@
 const LocalUrl = "http://127.0.0.1:5000"
 const www ='http://115.159.211.13:5001' 
-const BackUrl = LocalUrl
+const LocalServer = "http://10.1.1.99:5000"
+const BackUrl = LocalServer
 function createRoomItem(roomID, blackPlayer, whitePlayer) {
     // 创建各个元素
     var roomItem = document.createElement('div');

@@ -255,8 +255,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     const BackUrl = 'http://115.159.211.13:5001'
     const LocalUrl = "http://127.0.0.1:5000"
+    const LocalServer = "http://10.1.1.99:5000"
     // BackUrl LocalUrl
-    socketio = io(LocalUrl);
+    socketio = io(LocalServer);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
         if (userID == res.player1) {

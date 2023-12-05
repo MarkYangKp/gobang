@@ -7,6 +7,7 @@ import json
 from appInit import GetUsersInfo
 
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 
