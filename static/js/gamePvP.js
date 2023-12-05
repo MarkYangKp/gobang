@@ -1,4 +1,4 @@
-const BackUrl = 'http://115.159.211.13:5001'
+
 //棋盘数据  0 为空 1为黑 2为白
 var boardData = [[]];
 //记录棋谱
@@ -251,7 +251,10 @@ document.addEventListener("DOMContentLoaded", function () {
         roomID: roomID,
         userID: userID
     }
-    socketio = io(BackUrl);
+    const BackUrl = 'http://115.159.211.13:5001'
+    const LocalUrl = "http://127.0.0.1:5000"
+    // BackUrl LocalUrl
+    socketio = io(LocalUrl);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
         if (userID == res.player1) {
@@ -307,12 +310,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 socketio.on("Win" + roomID, res2 => {
                     if (res2.winer == player) {
                         document.getElementById("boardPad").innerHTML = ""
-                        document.getElementById("boardPad").appendChild(CreateAgainBox("恭喜你取得胜利",isAgain))
-                        
+                        document.getElementById("boardPad").appendChild(CreateAgainBox("恭喜你取得胜利", isAgain))
+
                         SubscriptAgain()
                     } else {
                         document.getElementById("boardPad").innerHTML = ""
-                        document.getElementById("boardPad").appendChild(CreateAgainBox("很遗憾你输了",isAgain))
+                        document.getElementById("boardPad").appendChild(CreateAgainBox("很遗憾你输了", isAgain))
                         SubscriptAgain()
                     }
                 })
@@ -331,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //生成再来一局提示框
 function CreateAgainBox(contentText) {
-    function eventHandler(event){
+    function eventHandler(event) {
         functionSel(event);
     }
     // 创建新的div元素
@@ -384,7 +387,7 @@ function CreateAgainBox(contentText) {
 
 //生成提示框
 function CreateMessageBox(contentText, isShowBut) {
-    
+
     var main = document.getElementById("main")
     var messageBox = document.createElement("div")
     messageBox.classList.add("messageBox")
@@ -427,7 +430,7 @@ function CreateMessageBox(contentText, isShowBut) {
 }
 //生成求和提示框
 function CreatePeaceMessageBox(contentText, isShowBut) {
-    
+
     var main = document.getElementById("main")
     var messageBox = document.createElement("div")
     messageBox.classList.add("messageBox")
@@ -483,7 +486,7 @@ function IsRepentance() {
     socketio.on("IsRepentance" + roomID, res => {
         if (player != res.player) {
             console.log("对方请求悔棋，您是否同意")
-            CreateMessageBox("对方请求悔棋，您是否同意", true,AcceptRepentance)
+            CreateMessageBox("对方请求悔棋，您是否同意", true, AcceptRepentance)
             socketio.on("RepentanceResult" + roomID, res1 => {
                 if (res1.result == 1) { //同意悔棋
                     RetractChess()
@@ -497,7 +500,7 @@ function IsRepentance() {
             })
         } else {
             console.log("正在等待对方回应，请稍后")
-            CreateMessageBox("正在等待对方回应，请稍后",false,AcceptRepentance)
+            CreateMessageBox("正在等待对方回应，请稍后", false, AcceptRepentance)
             socketio.on("RepentanceResult" + roomID, res2 => {
                 if (res2.result == 1) { //同意悔棋
                     RetractChess()
@@ -541,7 +544,7 @@ function SubscriptAgain() {
         if (res.againGame) {
             InitBoard()
             RenderBoard()
-            socketio.off("AgainGame" + roomID)
+            // socketio.off("AgainGame" + roomID)
         }
     })
 }
@@ -555,7 +558,7 @@ function peace() {
     socketio.emit("Peace", data)
 }
 //确认是否平局
-function IsPeace(e){
+function IsPeace(e) {
     var isAccept = e.target.dataset.isaccept
     console.log(isAccept)
     var data = {
@@ -563,10 +566,10 @@ function IsPeace(e){
         player: player,
         isAccept: isAccept
     }
-    socketio.emit("AcceptPeace", data) 
+    socketio.emit("AcceptPeace", data)
 }
 //订阅求和事件
-function  SubscriptPeace() {
+function SubscriptPeace() {
     socketio.on("Peace" + roomID, res => {
         if (player != res.player) {
             console.log("对方向你求和，你是否同意")
@@ -575,7 +578,7 @@ function  SubscriptPeace() {
                 if (res1.result == 1) { //同意求和
                     document.getElementById("messageBox").remove();
                     document.getElementById("boardPad").innerHTML = ""
-                    document.getElementById("boardPad").appendChild(CreateAgainBox("平局",isAgain));
+                    document.getElementById("boardPad").appendChild(CreateAgainBox("平局", isAgain));
                     SubscriptAgain()
                 } else { //不同意求和
                     RenderBoard()
@@ -586,12 +589,12 @@ function  SubscriptPeace() {
             })
         } else {
             console.log("正在等待对方回应，请稍后")
-            CreatePeaceMessageBox("正在等待对方回应，请稍后",false)
+            CreatePeaceMessageBox("正在等待对方回应，请稍后", false)
             socketio.on("AcceptPeace" + roomID, res2 => {
                 if (res2.result == 1) { //同意求和
                     document.getElementById("messageBox").remove();
                     document.getElementById("boardPad").innerHTML = ""
-                    document.getElementById("boardPad").appendChild(CreateAgainBox("平局",isAgain));
+                    document.getElementById("boardPad").appendChild(CreateAgainBox("平局", isAgain));
                     SubscriptAgain()
                 } else { //不同意求和
                     RenderBoard()
@@ -609,23 +612,23 @@ function admitDefeat() {
         roomID,
         player,
     }
-    socketio.emit("AdmitDefeat",data)
+    socketio.emit("AdmitDefeat", data)
 }
 //订阅认输
-function SubscriptAdmitDefeat(){
-    socketio.on("AdmitDefeat"+roomID,res=>{
+function SubscriptAdmitDefeat() {
+    socketio.on("AdmitDefeat" + roomID, res => {
         if (res.player != player) {
             document.getElementById("boardPad").innerHTML = ""
-            document.getElementById("boardPad").appendChild(CreateAgainBox("对方认输，恭喜你取得胜利"),isAgain)
-            
+            document.getElementById("boardPad").appendChild(CreateAgainBox("对方认输，恭喜你取得胜利"), isAgain)
+
             SubscriptAgain()
         } else {
             document.getElementById("boardPad").innerHTML = ""
-            document.getElementById("boardPad").appendChild(CreateAgainBox("你认输了，很遗憾你输了"),isAgain)
+            document.getElementById("boardPad").appendChild(CreateAgainBox("你认输了，很遗憾你输了"), isAgain)
             SubscriptAgain()
         }
 
-        socketio.off("AdmitDefeat"+roomID)
+        // socketio.off("AdmitDefeat" + roomID)
     })
 }
 

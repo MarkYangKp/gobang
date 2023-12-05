@@ -159,10 +159,11 @@ def AgainGame(data):
     userID = data['userID']
     isAgain = data['isAgain']
     current = shareData.rooms.get_room(roomID)
+    print(current.isAgainGame)
     if isAgain == "1":
         current.isAgainGame.append(userID)
 
-    if len(shareData.isAgainGame[roomID]) == 2:
+    if len(current.isAgainGame) == 2:
         emit("AgainGame"+roomID,{"againGame":1, "isAgain":isAgain},broadcast=True)
         current.isAgainGame = []
     else:
@@ -170,4 +171,4 @@ def AgainGame(data):
 
 
 if __name__ == '__main__':
-    socketio.run(app,host="0.0.0.0",port=5001)
+    socketio.run(app,host="0.0.0.0",port=5000)
