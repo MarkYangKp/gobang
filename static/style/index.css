@@ -1,34 +1,40 @@
-body{
-    display: flex; 
+
+
+
+
+body {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-#main{
+
+#main {
     display: flex;
     flex-direction: column;
     /* border-radius: 20px; */
     padding: 20px;
-    box-shadow: 0 0 1px rgba(0,0,0.5); 
+    box-shadow: 0 0 1px rgba(0, 0, 0.5);
 
 }
-.modelText{
-    display: flex; 
+
+.modelText {
+    display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 }
-.modelBox{
+
+.modelBox {
     margin: 10px;
-    
-    
-}
-#pvpBut{
+
 
 }
-#pveBut{
 
-}
-.Butt{
+#pvpBut {}
+
+#pveBut {}
+
+.Butt {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,47 +42,56 @@ body{
     width: 300px;
     background-color: #e5e5e5;
     border-radius: 20px;
-    box-shadow: 0 0 2px rgba(0,0,0.5);
+    box-shadow: 0 0 3px rgba(0, 0, 0.5);
 }
-.Butt:hover{
-    
+
+.Butt:hover {
+    box-shadow: 0 0 1px rgba(0, 0, 0.5);
 }
-.Butt:active{
-    height: 60px;
-    width: 310px;
+
+.Butt:active {
+    height: 50px;
+    width: 300px;
     background-color: #e5e5e5;
     border-radius: 20px;
-    box-shadow: 0 0 1px rgba(0,0,0.5); 
+    box-shadow: 0 0 0px rgba(0, 0, 0.5);
 }
-.main-item{
+
+.main-item {
     display: flex;
     flex-direction: row;
 }
-.item-item{
-    display: flex;
-    flex-direction: column; 
-}
-.main-item1{
+
+.item-item {
     display: flex;
     flex-direction: column;
 }
-.rankBox{
+
+.main-item1 {
     display: flex;
-    flex-direction: row; 
+    flex-direction: column;
+}
+
+.rankBox {
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
 }
-.rankBox-item{
+
+.rankBox-item {
     text-align: center;
     min-width: 90px;
 }
-#SetNameBox{
+
+#SetNameBox {
     display: none;
 }
-.SetName{
+
+.SetName {
     position: absolute;
     width: 400px;
     height: 250px;
-    box-shadow: 0 0 2px rgba(0,0,0.5);
+    box-shadow: 0 0 2px rgba(0, 0, 0.5);
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -86,14 +101,17 @@ body{
     border-radius: 4px;
     background-color: #ffffff;
 }
-.SetName-title{
+
+.SetName-title {
     font-size: 50px;
 }
-.SetName-inputBox{
+
+.SetName-inputBox {
     padding: 10px;
 }
-.inputBox{
-    
+
+.inputBox {
+
     height: 50px;
     width: 300px;
     background-color: #e5e5e5;
@@ -103,30 +121,35 @@ body{
     border: #ffffff;
     padding: 10px;
 }
-.SetNameButton{
+
+.SetNameButton {
     display: flex;
     width: 120px;
     height: 50px;
     background-color: #e5e5e5;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 7px rgba(0,0,0.8);
+    box-shadow: 0 0 7px rgba(0, 0, 0.8);
     font-size: 33px;
     border-radius: 10px;
 }
-.SetNameButton:hover{
-    box-shadow: 0 0 5px rgba(0,0,0.8);
+
+.SetNameButton:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0.8);
 }
-.SetNameButton:active{
-    box-shadow: 0 0 0px rgba(0,0,0.8);
+
+.SetNameButton:active {
+    box-shadow: 0 0 0px rgba(0, 0, 0.8);
 }
-.exitBox{
+
+.exitBox {
     /* position: absolute; */
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.SetName-exit{
+
+.SetName-exit {
     position: absolute;
     width: 30px;
     height: 30px;
@@ -134,7 +157,8 @@ body{
     right: 5px;
     top: 10px;
 }
-.SetName-exit::after{
+
+.SetName-exit::after {
     position: absolute;
     content: "";
     width: 30px;
@@ -145,7 +169,8 @@ body{
     top: 10px;
     border-radius: 4px;
 }
-.SetName-exit::before{
+
+.SetName-exit::before {
     position: absolute;
     content: "";
     right: 5px;
@@ -156,7 +181,8 @@ body{
     transform: rotate(-45deg);
     border-radius: 4px;
 }
-.SetName-exit:active{
+
+.SetName-exit:active {
     position: absolute;
     right: 5px;
     top: 10px;
@@ -164,7 +190,8 @@ body{
     height: 30px;
     background-color: #ffffff;
 }
-.SetName-exit:hover{
+
+.SetName-exit:hover {
     position: absolute;
     right: 5px;
     top: 10px;
@@ -183,4 +210,30 @@ body{
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-  }
+}
+
+@media screen and (max-width: 500px) {
+    .Butt {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        width: 200px;
+        background-color: #e5e5e5;
+        border-radius: 20px;
+        box-shadow: 0 0 3px rgba(0, 0, 0.5);
+    }
+    
+    .Butt:hover {
+        box-shadow: 0 0 1px rgba(0, 0, 0.5);
+    }
+    
+    .Butt:active {
+        height: 40px;
+        width: 200px;
+        background-color: #e5e5e5;
+        border-radius: 20px;
+        box-shadow: 0 0 1px rgba(0, 0, 0.5);
+    }
+    
+}

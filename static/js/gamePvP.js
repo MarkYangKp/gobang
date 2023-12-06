@@ -372,7 +372,7 @@ function CreateAgainBox(contentText) {
 }
 
 //生成提示框
-function CreateMessageBox(contentText, isShowBut) {
+function CreateMessageBox(contentText, isShowBut,defFunction) {
 
     var main = document.getElementById("main")
     var messageBox = document.createElement("div")
@@ -396,12 +396,12 @@ function CreateMessageBox(contentText, isShowBut) {
     msgBut1.classList.add("msgBut")
     msgBut1.innerText = "是"
     msgBut1.dataset.isaccept = "1"
-    msgBut1.addEventListener("click", AcceptRepentance)
+    msgBut1.addEventListener("click", defFunction)
     var msgBut2 = document.createElement("div")
     msgBut2.classList.add("msgBut")
     msgBut2.innerText = "否"
     msgBut2.dataset.isaccept = "0"
-    msgBut2.addEventListener("click", AcceptRepentance)
+    msgBut2.addEventListener("click", defFunction)
 
     msgAction.appendChild(msgBut1)
     msgAction.appendChild(msgBut2)
@@ -657,10 +657,13 @@ function isExitRoom(e) {
 
         // socketio.emit("ExitRoom", data)
         window.location.href = "/roomList?userID="+userID
+    }else{
+        document.getElementById("messageBox").remove()
     }
 
 
 }
+
 function PlayMusic(musicType) {
     // 创建音频上下文
     var audioContext = new (window.AudioContext || window.webkitAudioContext)();

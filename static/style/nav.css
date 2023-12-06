@@ -41,3 +41,48 @@
     margin-right: 80px;
     margin-left: 20px;
 }
+@media screen and (max-width: 500px) {
+    #header{
+        /* top: -10px; */
+        width: 100%;
+        height: 80px;
+        background-color: #e5e5e5;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .NavBox{
+        display: flex;
+        flex-direction: row; 
+        margin-left: 10px;
+        
+    }
+    .navItem{
+        background-color: #ffffff;
+        width: 90px;
+        height: 80px;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        text-align: center;
+        display: flex;
+    }
+    .UserBox{
+        display: flex;
+        flex-direction: row;
+    }
+    .avatarBox{
+        height: 60px;
+        width: 60px;
+        border-radius: 80px;
+        background-color: aqua;
+        align-self: center;
+        justify-self: center;
+    }
+    .nickNameBox{
+        align-self: center;
+        justify-self: center;
+        margin-right: 80px;
+        margin-left: 20px;
+    }
+}
