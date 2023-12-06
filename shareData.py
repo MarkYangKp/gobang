@@ -1,12 +1,14 @@
 import json
 import time
 class Room:
-    def __init__(self, roomID, player1, player2, playerNum, moves, isAgainGame):
+    def __init__(self, roomID, player1, player2, playerNum, moves, isAgainGame, player1_name, player2_name):
         self.roomID = roomID
         self.player1 = player1
         self.player2 = player2
         self.playerNum = playerNum
         self.isAgainGame = isAgainGame
+        self.player1_name = player1_name
+        self.player2_name = player2_name
         self.moves = moves
         self.next = None
 
@@ -15,9 +17,9 @@ class RoomList:
         # 初始化房间列表，头部节点为None
         self.head = None
 
-    def add_room(self, roomID, player1, player2 , playerNum, moves, isAgainGame):
+    def add_room(self, roomID, player1, player2 , playerNum, moves, isAgainGame, palyer1_name, player2_name):
         # 创建一个新的房间对象
-        new_room = Room(roomID, player1, player2 , playerNum, moves, isAgainGame)
+        new_room = Room(roomID, player1, player2 , playerNum, moves, isAgainGame, palyer1_name, player2_name)
         if self.head is None:
             # 如果列表为空，将新房间设置为头部节点
             print('0')
