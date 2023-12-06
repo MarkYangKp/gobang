@@ -64,8 +64,10 @@ def newRoom(data):
     playerNum = ''
     moves=[]
     isAgainGame = []
+    player1_name = ''
+    player2_name = ''
     roomID = str(random.randint(100000, 999999))
-    shareData.rooms.add_room(roomID,player1,player2,playerNum,moves,isAgainGame)
+    shareData.rooms.add_room(roomID,player1,player2,playerNum,moves,isAgainGame,player1_name,player2_name)
     emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 0},broadcast=True)
 
 
@@ -73,11 +75,19 @@ def newRoom(data):
 def roomList():
     room_data = []
     current = shareData.rooms.head
+    userData = GetUsersInfo()
+    print(userData)
     while current is not None:
+        #根据userID遍历userData，获取userName
+        for user in userData:
+            if user['userID'] == current.player1:
+                current.player1_name = user['userName']
+            if user['userID'] == current.player2:
+                current.player2_name = user['userName']
         room_data.append({
             'roomID': current.roomID,
-            'player1': current.player1,
-            'player2': current.player2
+            'player1': current.player1_name,
+            'player2': current.player2_name
         })
         current = current.next
     print(room_data)
@@ -95,14 +105,39 @@ def joinRoom(data):
             # 新建房间时已进行player1的赋值
             emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0}, broadcast=True)
         elif current.playerNum == '1':
-            current.player2 = player
-            current.playerNum += '1'
-            emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
+            if player != current.player1:
+                current.player2 = player
+                current.playerNum += '1'
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
         else:
             emit('joinRoom_fail', {'room': roomID})
     else:
         print('Cant find the room!'+roomID)
 
+
+@socketio.on('leaveRoom')
+def leaveRoom(data):
+    roomID = data['roomID']
+    player = data['userID']
+    current = shareData.rooms.get_room(roomID)
+    if current.playerNum == '11':
+        if player == current.player1:
+            current.player1 = ''
+            current.playerNum = '1'
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+        elif player == current.player2:
+            current.player2 = ''
+            current.playerNum = '1'
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+    elif current.playerNum == '1':
+        if player == current.player1:
+            current.player1 = ''
+            shareData.rooms.delete_room(roomID)
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+        elif player == current.player2:
+            current.player2 = ''
+            shareData.rooms.delete_room(roomID)
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
 
 
 @socketio.on('fallChess')
