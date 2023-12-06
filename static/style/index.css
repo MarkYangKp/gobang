@@ -60,6 +60,7 @@ body {
 .main-item {
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
 }
 
 .item-item {

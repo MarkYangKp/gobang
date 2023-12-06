@@ -8,13 +8,15 @@ body {
 #main {
     display: flex;
     flex-direction: column;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 1px rgba(0, 0, 0.5);
+    height: auto;
 }
 
 .roomList {
-    user-select: none; /* 阻止文字选中 */
+    user-select: none;
+    /* 阻止文字选中 */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -33,41 +35,43 @@ body {
     box-sizing: border-box;
 }
 
-.roomItem:active{
+.roomItem:active {
     background-color: #e5e5e5;
 }
 
-.roomIDBox{
+.roomIDBox {
     display: flex;
     flex-direction: row;
 }
 
-.userList{
+.userList {
     display: flex;
     flex-direction: column;
 }
 
-.userBox{
+.userBox {
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
 }
 
-.createRoom{
-    position:sticky;
+.createRoom {
+    position: sticky;
     bottom: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.createRoom-item{
+
+.createRoom-item {
     width: 50px;
     height: 50px;
     border-radius: 50px;
     background-color: #e5e5e5;
     position: relative;
 }
-.createRoom-item::before{
+
+.createRoom-item::before {
     content: "";
     position: absolute;
     width: 5px;
@@ -76,7 +80,8 @@ body {
     top: 5px;
     background-color: #ffffff;
 }
-.createRoom-item::after{
+
+.createRoom-item::after {
     content: "";
     position: absolute;
     width: 40px;
@@ -85,6 +90,36 @@ body {
     left: 5px;
     background-color: #ffffff;
 }
-.createRoom-item:active{
+
+.createRoom-item:active {
     background-color: #ffffff;
+}
+
+@media screen and (max-width: 500px) {
+    .roomList {
+        user-select: none;
+        /* 阻止文字选中 */
+        display: flex;
+        flex-direction: row;
+        flex-wrap:wrap;
+        justify-content: space-between;
+        width: 380px;
+        align-items: start;
+        max-height: 100%;
+        overflow: scroll;
+    }
+
+    .roomItem {
+        padding: 4px;
+        box-shadow: 0 0 1px rgba(0, 0, 0.5);
+        margin-left: 4px;
+        width: 42%;
+        height: 100px;
+        /* margin-bottom: 20px; */
+        /* box-sizing: border-box; */
+    }
+
+    .roomItem:active {
+        background-color: #e5e5e5;
+    }
 }

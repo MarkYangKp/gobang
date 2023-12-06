@@ -220,3 +220,24 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+@media screen and (max-width: 500px) {
+    #main {
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 10px;
+        box-shadow: 0 0 1px rgba(0, 0, 0.5);
+    }
+    .isPlayChess {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .tipButBox {
+        display: flex;
+        flex-direction: row;
+    }
+}
