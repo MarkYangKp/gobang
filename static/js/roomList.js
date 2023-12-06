@@ -1,14 +1,18 @@
 const LocalUrl = "http://127.0.0.1:5000"
-const www ='http://115.159.211.13:5001' 
+const www = 'http://115.159.211.13:5001'
 const LocalServer = "http://10.1.1.99:5000"
-const BackUrl = LocalServer
+const BackUrl = LocalUrl
+
+var userName = null
+
+
 function createRoomItem(roomID, blackPlayer, whitePlayer) {
     // 创建各个元素
     var roomItem = document.createElement('div');
     roomItem.classList.add('roomItem');
     // roomItem.setAttribute('data-roomid', roomID);
     roomItem.dataset.roomid = roomID
-    roomItem.addEventListener('click',joinRoom);
+    
 
     var roomIDBox = document.createElement('div');
     roomIDBox.classList.add('roomIDBox');
@@ -41,7 +45,7 @@ function createRoomItem(roomID, blackPlayer, whitePlayer) {
     roomItem.appendChild(roomIDBox);
     roomItem.appendChild(separator);
     roomItem.appendChild(userList);
-
+    roomItem.addEventListener('click', joinRoom);
     return roomItem;
 }
 
@@ -75,64 +79,66 @@ function addRoomToList(roomID, blackPlayer, whitePlayer) {
 let socket = null
 
 function joinRoom(event) {
-    //建立socket连接
-    var roomID = event.target.dataset.roomid
-    console.log(event)
-    window.location.href = "./gamePvP?roomID="+roomID 
+        //建立socket连接
+        var roomID = event.target.dataset.roomid
+        console.log(event)
+        window.location.href = "./gamePvP?roomID=" + roomID
+
 }
 
 function onLoad() {
-    
+
 }
 function createRoom() {
     const userID = localStorage.getItem('user_id').toString();
     data = {
-        'userID':userID
+        'userID': userID,
+        userName:userName
     }
     socket.emit("newRoom", data);
 }
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    userName = localStorage.getItem('user_name');
     socket = io(BackUrl);
     socket.emit("roomList");
     socket.on("room_list", (res) => {
         console.log(res)
         var roomList = document.getElementById('roomList');
-        roomList.innerHTML = null 
+        roomList.innerHTML = null
         res.forEach(element => {
             addRoomToList(element.roomID, element.player1, element.player2);
         });
-    }) 
-    socket.on("room_created",res=>{
-        addRoomToList(res.roomID, res.player1, res.player2); 
+    })
+    socket.on("room_created", res => {
+        addRoomToList(res.roomID, res.player1, res.player2);
         //先添加房间之后再自动进入，体现一下这个过程
-        if(res.player1 == localStorage.getItem("user_id")){
-            window.location.href = "./gamePvP?roomID="+res.roomID
+        if (res.player1 == localStorage.getItem("user_id")) {
+            window.location.href = "./gamePvP?roomID=" + res.roomID
         }
-        
+
     })
 });
 function getRoomList() {
     socket = io(BackUrl);
     socket.on("connect", (res) => {
         console.log("连接成功")
-        
+
     })
     console.log('9')
     socket.emit("roomList");
     socket.on("room_list", (roomList) => {
         console.log(roomList); // 打印 roomList 列表
         roomList.forEach(element => {
-            addRoomToList(element.roomID,element.player1,element.player2) 
+            addRoomToList(element.roomID, element.player1, element.player2)
         });
     });
 
 }
 
-function addClick()
-{
+function addClick() {
     const index = document.getElementById("indexPage")
-    index.addEventListener("click",function(){
-        window.location.href = "/"; 
+    index.addEventListener("click", function () {
+        window.location.href = "/";
     })
 }
 addClick()

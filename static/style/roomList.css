@@ -14,6 +14,7 @@ body {
 }
 
 .roomList {
+    user-select: none; /* 阻止文字选中 */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

@@ -12,6 +12,7 @@ var lastBlock = {
 var socketio = null
 
 var userID = null
+var userName = null
 var roomID = null
 var isStart = false; //是否开始游戏
 var player = 0 //玩家类型  1 2 
@@ -60,45 +61,14 @@ function handleCellClick(event) {
 
         boardData[row][col] = 1
         PlayMusic("failChess")
-        // chessManual = {
-        //     "userType": player,
-        //     "pos": {
-        //         "x": col, "y": row  //x,y坐标和行列是相反的
-        //     }
-        // }
-        // chessManuals.push(chessManual)
-        // RenderBoard()
-        // if (checkWin(player, row, col)) {
 
-        //     console.log("Player:" + player + "Win!!!")
-        //     alert("黑方赢！！！")
-        //     InitBoard()
-        //     // RenderBoard()
-        // }
     } else if (player == 2) {
 
         boardData[row][col] = 2
         PlayMusic("failChess")
-        // chessManual = {
-        //     "userType": player,
-        //     "pos": {
-        //         "x": col, "y": row  //x,y坐标和行列是相反的
-        //     }
-        // }
 
-        // chessManuals.push(chessManual)
-
-        // if (checkWin(player, row, col)) {
-
-        //     console.log("Player:" + player + "Win!!!")
-        //     alert("白方赢！！！")
-        //     InitBoard()
-        //     // RenderBoard()
-        // }
     }
-    // RenderBoard()
     var data = {
-        // userID:userID,
         roomID: roomID,
         player: player,
         row: row,
@@ -107,8 +77,7 @@ function handleCellClick(event) {
     socketio.emit("fallChess", data)
 
     isPlay = 0
-    // console.log(boardData)
-    // console.log(chessManuals)
+
 }
 function SendAndReceive() {
     socketio.emit()
@@ -225,17 +194,25 @@ function StatusChecking() {
         if (isPlay == 1) {
             document.getElementById("Player1").classList.remove("await")
             document.getElementById("Player1").classList.add("play")
+            document.getElementById("Player2").classList.remove("play")
+            document.getElementById("Player2").classList.add("await")
         } else {
             document.getElementById("Player1").classList.remove("play")
             document.getElementById("Player1").classList.add("await")
+            document.getElementById("Player2").classList.remove("await")
+            document.getElementById("Player2").classList.add("play")
         }
     } else if (player == 2) {
         if (isPlay == 1) {
             document.getElementById("Player2").classList.remove("await")
             document.getElementById("Player2").classList.add("play")
+            document.getElementById("Player1").classList.remove("play")
+            document.getElementById("Player1").classList.add("await")
         } else {
             document.getElementById("Player2").classList.remove("play")
             document.getElementById("Player2").classList.add("await")
+            document.getElementById("Player1").classList.remove("await")
+            document.getElementById("Player1").classList.add("play")
         }
     }
 }
@@ -247,17 +224,21 @@ document.addEventListener("DOMContentLoaded", function () {
     var urlParams = new URL(currentURL);
     // 获取userID参数的值
     roomID = urlParams.searchParams.get('roomID');
-    console.log(roomID)
     userID = localStorage.getItem('user_id');
+    userName = localStorage.getItem('user_name');
+
+    console.log("roomID:" + roomID + "  userName:" + userName)
+
     data = {
         roomID: roomID,
-        userID: userID
+        userID: userID,
+        userName: userName
     }
     const BackUrl = 'http://115.159.211.13:5001'
     const LocalUrl = "http://127.0.0.1:5000"
     const LocalServer = "http://10.1.1.99:5000"
     // BackUrl LocalUrl
-    socketio = io(LocalServer);
+    socketio = io(LocalUrl);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
         if (userID == res.player1) {
@@ -413,12 +394,12 @@ function CreateMessageBox(contentText, isShowBut) {
 
     var msgBut1 = document.createElement("div")
     msgBut1.classList.add("msgBut")
-    msgBut1.innerHTML = " <span>是</span>"
+    msgBut1.innerText = "是"
     msgBut1.dataset.isaccept = "1"
     msgBut1.addEventListener("click", AcceptRepentance)
     var msgBut2 = document.createElement("div")
     msgBut2.classList.add("msgBut")
-    msgBut2.innerHTML = " <span>否</span>"
+    msgBut2.innerText = "否"
     msgBut2.dataset.isaccept = "0"
     msgBut2.addEventListener("click", AcceptRepentance)
 
@@ -456,12 +437,12 @@ function CreatePeaceMessageBox(contentText, isShowBut) {
 
     var msgBut1 = document.createElement("div")
     msgBut1.classList.add("msgBut")
-    msgBut1.innerHTML = " <span>是</span>"
+    msgBut1.innerText = "是"
     msgBut1.dataset.isaccept = "1"
     msgBut1.addEventListener("click", IsPeace)
     var msgBut2 = document.createElement("div")
     msgBut2.classList.add("msgBut")
-    msgBut2.innerHTML = " <span>否</span>"
+    msgBut2.innerText = "否"
     msgBut2.dataset.isaccept = "0"
     msgBut2.addEventListener("click", IsPeace)
 
@@ -522,6 +503,7 @@ function IsRepentance() {
 }
 //是否同意悔棋
 function AcceptRepentance(e) {
+
     var isAccept = e.target.dataset.isaccept
     console.log(isAccept)
     var data = {
@@ -530,9 +512,11 @@ function AcceptRepentance(e) {
         isAccept: isAccept
     }
     socketio.emit("AcceptRepentance", data)
+
 }
 //是否同意重新开局
 function isAgain(e) {
+
     var isAgain = e.target.dataset.isagain;
     console.log(isAgain)
     var data = {
@@ -542,6 +526,7 @@ function isAgain(e) {
     }
 
     socketio.emit("AgainGame", data)
+
 }
 //订阅是否重新开局
 function SubscriptAgain() {
@@ -564,6 +549,7 @@ function peace() {
 }
 //确认是否平局
 function IsPeace(e) {
+
     var isAccept = e.target.dataset.isaccept
     console.log(isAccept)
     var data = {
@@ -572,6 +558,7 @@ function IsPeace(e) {
         isAccept: isAccept
     }
     socketio.emit("AcceptPeace", data)
+
 }
 //订阅求和事件
 function SubscriptPeace() {
@@ -623,11 +610,13 @@ function admitDefeat() {
 function SubscriptAdmitDefeat() {
     socketio.on("AdmitDefeat" + roomID, res => {
         if (res.player != player) {
+            PlayMusic("winGame")
             document.getElementById("boardPad").innerHTML = ""
             document.getElementById("boardPad").appendChild(CreateAgainBox("对方认输，恭喜你取得胜利"), isAgain)
 
             SubscriptAgain()
         } else {
+            PlayMusic("failedGame")
             document.getElementById("boardPad").innerHTML = ""
             document.getElementById("boardPad").appendChild(CreateAgainBox("你认输了，很遗憾你输了"), isAgain)
             SubscriptAgain()
@@ -638,26 +627,46 @@ function SubscriptAdmitDefeat() {
 }
 
 function addClick() {
-    const index = document.getElementById("indexPage")
-    index.addEventListener("click", function () {
-        window.location.href = "/";
-    })
-    document.getElementById("roomListPage").addEventListener("click", function () {
-        window.location.href = "/roomList";
-    })
+    // const index = document.getElementById("indexPage")
+    // index.addEventListener("click", function () {
+    //     window.location.href = "/";
+    // })
+    // document.getElementById("roomListPage").addEventListener("click", function () {
+    //     window.location.href = "/roomList";
+    // })
     document.getElementById("repentance").addEventListener("click", repentance)
     document.getElementById("peace").addEventListener("click", peace)
     document.getElementById("admitDefeat").addEventListener("click", admitDefeat)
-
+    document.getElementById("exitRoom").addEventListener("click", exitRoom)
 }
 
+function exitRoom() {
+    CreateMessageBox("您是否要退出房间！", true, isExitRoom)
+}
+//是否同意重新开局
+function isExitRoom(e) {
 
+    var isExitRoom = e.target.dataset.isaccept;
+    if (isExitRoom == "1") {
+        var data = {
+            roomID,
+            userID,
+            isExitRoom
+        }
+        console.log("111")
+
+        // socketio.emit("ExitRoom", data)
+        window.location.href = "/roomList?userID="+userID
+    }
+
+
+}
 function PlayMusic(musicType) {
     // 创建音频上下文
     var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
     // 创建音频元素
-    var audioElement = new Audio('/static/music/'+musicType+".mp3");
+    var audioElement = new Audio('/static/music/' + musicType + ".mp3");
 
     // 创建音频源
     var audioSource = audioContext.createMediaElementSource(audioElement);

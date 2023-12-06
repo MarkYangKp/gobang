@@ -4,30 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>五子棋-人人对弈</title>
+    <!-- <link rel="stylesheet" type="text/css" href="../static/style/nav.css"/> -->
     <link rel="stylesheet" type="text/css" href="../static/style/gamePvP.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/style/nav.css"/>
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
     
 </head>
 <body>
     
-    <div id="header">
-        <div class="NavBox">
+    <div id="header" class="header">
+        <!-- <div class="NavBox">
            <div class="navItem" id="indexPage"><span>首页</span></div>
            <div class="navItem" id="roomListPage"><span>房间列表</span></div>
            <div class="navItem"><span>关于</span></div>
-        </div>
-       <div class="UserBox">
-           <div class="avatarBox">
-               <img class="imgAvatar"/>
-           </div>
-           <div class="nickNameBox">
-               <span>Mark</span>
-           </div>
-       </div>
-   </div>
-    <div id="main">
+        </div> -->
         <div class="userBox">
             <div id="Player1" class="userInfo await">
                 <div class="userName " >Player1</div>
@@ -38,6 +29,17 @@
                 <div class="timer" id="timer"></div>
             </div>
         </div>
+       <!-- <div class="UserBox">
+           <div class="avatarBox">
+               <img class="imgAvatar"/>
+           </div>
+           <div class="nickNameBox">
+               <span>Mark</span>
+           </div>
+       </div> -->
+   </div>
+    <div id="main">
+        
         <div id="boardPad">
             <div class="cell-black cell"></div>
             <div class="cell-white cell"></div>
@@ -52,6 +54,7 @@
                     <div class="tipBut" data-isplaychess="0" id="repentance">悔棋</div>
                     <div class="tipBut" data-isplaychess="1" id="peace">求和</div>
                     <div class="tipBut" data-isplaychess="2" id="admitDefeat">认输</div>
+                    <div class="tipBut" data-isplaychess="3" id="exitRoom">退出</div>
                 </div>
             </div>
         </div>

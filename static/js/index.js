@@ -67,7 +67,7 @@ function SetName(e) {
         var userName = inputBox.value
         localStorage.setItem('user_name', userName);
         // 定义请求的URL
-        const LocalServer = "http://10.1.1.99:5000"
+        const LocalServer = "http://127.0.0.1:5000"
         const url = LocalServer+'/setusername';
 
         // 构建要发送的数据
