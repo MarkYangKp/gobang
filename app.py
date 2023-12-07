@@ -109,6 +109,9 @@ def joinRoom(data):
                 current.player2 = player
                 current.playerNum += '1'
                 emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
+            else:
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 0}, broadcast=True)
+ 
         else:
             emit('joinRoom_fail', {'room': roomID})
     else:
@@ -201,8 +204,8 @@ def Peace(data):
     roomID = data['roomID']
     player = data['player']
     emit('Peace'+roomID,{"roomID":roomID,"player":player},broadcast=True)
-
-
+# DBFEGAC DBFEGAC
+# DBFEGAC DBFEGAC
 
 #确认求和
 @socketio.on('AcceptPeace')
