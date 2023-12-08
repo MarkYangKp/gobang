@@ -1,18 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const userName =  IsSetName()
-    if(userName){
+    const userName = IsSetName()
+    if (userName) {
         document.getElementById("userNameSpan").innerText = userName
-    }else{
-        document.getElementById("userNameSpan").innerText  = "无名小卒"
+    } else {
+        document.getElementById("userNameSpan").innerText = "无名小卒"
     }
     document.getElementById("SetNameButton").addEventListener("click", SetName)
     document.getElementById("SetName-exit").addEventListener("click", HiedSetNameBox)
+
+    //join us
+    console.log("************************************************************");
+    console.log("*  ****  ******  ****  ****    **        **   **   *******  *");
+    console.log("*   **   **  **   **   ** **   **        **   **   **       ");
+    console.log("*   **   **  **   **   **  **  **        **   **   *******  *");
+    console.log("*   **   **  **   **   **   ** **        **   **        **  *");
+    console.log("* ****   ******  ****  **    ****        *******   *******  *");
+    console.log("************************************************************");
+
+    
+
+
 })
 
 // const outils = require("./outils.min.js")
 var userID = undefined
 function modelCheck(e) {
-    if(IsSetName()){
+    if (IsSetName()) {
         console.log(e);
         var model = e.target.dataset.model;
         console.log(model);
@@ -23,10 +36,10 @@ function modelCheck(e) {
         } else if (model == "pve") {
             window.location.href = "gamePvE?userID=" + userID;
         }
-    }else{
+    } else {
         showSetNameBox()
     }
-    
+
 
     //qdqwdqd
 }
@@ -43,7 +56,7 @@ function SetUserID() {
 function IsSetName() {
     // 从localStorage获取用户name
     var userName = localStorage.getItem('user_name');
-    if (userName == undefined || userName == null || userName =="") {
+    if (userName == undefined || userName == null || userName == "") {
         return false
     } else {
         return userName
@@ -68,7 +81,7 @@ function SetName(e) {
         localStorage.setItem('user_name', userName);
         // 定义请求的URL
         const LocalServer = "http://127.0.0.1:5000"
-        const url = LocalServer+'/setusername';
+        const url = LocalServer + '/setusername';
 
         // 构建要发送的数据
         const data = {
@@ -93,7 +106,7 @@ function SetName(e) {
             .then(data => {
                 // 处理响应数据
                 console.log(data);
-                if(data.code == 1){
+                if (data.code == 1) {
                     document.getElementById("userNameSpan").innerText = userName
                     HiedSetNameBox()
                     window.location.href = "/"
