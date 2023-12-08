@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人人对弈模式-房间列表</title>
-    <link rel="stylesheet" type="text/css" href="../static/style/roomList.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/style/nav.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/style/roomList.css" />
+    <link rel="stylesheet" type="text/css" href="../static/style/nav.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
 </head>
+
 <body>
-    
+
     <div id="header">
         <div class="NavBox">
-           <div class="navItem" id="indexPage"><span>首页</span></div>
-           <!-- <div class="navItem"><span></span></div> -->
-           <div class="navItem" id="aboutPage"><span>关于</span></div>
+            <div class="navItem" id="indexPage"><span>首页</span></div>
+            <!-- <div class="navItem"><span></span></div> -->
+            <div class="navItem" id="aboutPage"><span>关于</span></div>
         </div>
-       <div class="UserBox">
-           <div class="avatarBox">
-               <img class="imgAvatar"/>
-           </div>
-           <div class="nickNameBox">
-               <span>Mark</span>
-           </div>
-       </div>
-   </div>
+        <div class="UserBox">
+            <div class="avatarBox">
+                <img class="imgAvatar" />
+            </div>
+            <div class="nickNameBox" id="nickNameBox">
+                <span>Mark</span>
+            </div>
+        </div>
+    </div>
     <div id="main">
         <div class="roomList" id="roomList">
-            <div class="roomItem" data-roomid="123" onclick="joinRoom(event)">
+            <!-- <div class="roomItem" data-roomid="123" onclick="joinRoom(event)">
                 <div class="roomIDBox">
                     <div class="idText"><span>房间ID：</span></div>
                     <div class="roomID">999</div>
@@ -43,12 +45,14 @@
                         <div class="userName"><span>Josn</span></div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="createRoom">
             <span class="createRoom-item" onclick="createRoom()"></span>
         </div>
     </div>
+    
     <script src="../static/js/roomList.js"></script>
 </body>
+
 </html>
