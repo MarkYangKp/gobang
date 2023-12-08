@@ -5,6 +5,7 @@ from checkLine import check_win
 import shareData
 import json
 from appInit import GetUsersInfo
+from appInit import Score
 
 
 
@@ -172,6 +173,7 @@ def checkWin(data):
     current = shareData.rooms.get_room(roomID)
     # print(player,current.moves[-1][0],current.moves[-1][1],board_data)
     if(check_win(player,current.moves[-1][0],current.moves[-1][1],board_data)):
+        Score("win",player,roomID)
         emit('Win'+roomID,{'winer':current.moves[-1][2],'roomID':roomID,'status':1},broadcast=True)
 
 
@@ -204,6 +206,24 @@ def AcceptRepentance(data):
 def AdmitDefeat(data):
     roomID = data['roomID']
     player = data['player']
+    # 积分操作
+    Score("AdmitDefeat",player,roomID)
+    # 一方认输，fail+1
+    # for user in userData:
+    #     if user['userID'] == player:
+    #         user['fail']+=1
+    # current = shareData.rooms.get_room(roomID)
+    # # 另一方，win+1
+    # if player == current.player1:
+    #     for user in userData:
+    #         if user['userID'] == current.player2:
+    #             user['win']+=1
+    #             break
+    # else:
+    #     for user in userData:
+    #         if user['userID'] == current.player1:
+    #             user['win']+=1
+    #             break
     emit("AdmitDefeat"+roomID,{"player":player},broadcast=True)
 
 
@@ -214,8 +234,7 @@ def Peace(data):
     roomID = data['roomID']
     player = data['player']
     emit('Peace'+roomID,{"roomID":roomID,"player":player},broadcast=True)
-# DBFEGAC DBFEGAC
-# DBFEGAC DBFEGAC
+
 
 #确认求和
 @socketio.on('AcceptPeace')
@@ -224,8 +243,10 @@ def AcceptPeace(data):
     roomID = data['roomID']
     player = data['player']
     isAccept = data['isAccept']
-    print(type(isAccept))
+    
     if(isAccept == "1"):
+        current = shareData.rooms.get_room(roomID)
+        Score("Peace",player,roomID)
         emit("AcceptPeace"+roomID,{"result":1},broadcast=True)
     else:
         emit("AcceptPeace"+roomID,{"result":0},broadcast=True)
