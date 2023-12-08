@@ -13,6 +13,7 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 
 socketio = SocketIO(app, cors_allowed_origins='*')
 
+userData = GetUsersInfo()
 
 
 @app.route("/",methods=['GET', 'POST'])
@@ -75,7 +76,6 @@ def newRoom(data):
 def roomList():
     room_data = []
     current = shareData.rooms.head
-    userData = GetUsersInfo()
     print(userData)
     while current is not None:
         #根据userID遍历userData，获取userName
@@ -103,14 +103,24 @@ def joinRoom(data):
         if current.playerNum == '':
             current.playerNum += '1'
             # 新建房间时已进行player1的赋值
-            emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0}, broadcast=True)
+            # 根据userID获取玩家名字
+            for user in userData:
+                if user['userID'] == player:
+                    current.player1_name == user['userName']
+            emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userName':current.player1_name}, broadcast=True)
         elif current.playerNum == '1':
             if player != current.player1:
                 current.player2 = player
                 current.playerNum += '1'
-                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
+                for user in userData:
+                    if user['userID'] == player:
+                        current.player2_name == user['userName']
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1, 'userName':current.player2_name}, broadcast=True)
             else:
-                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 0}, broadcast=True)
+                for user in userData:
+                    if user['userID'] == player:
+                        current.player1_name == user['userName']
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': '', 'room': roomID, 'state': 0,'userName':current.player1_name}, broadcast=True)
  
         else:
             emit('joinRoom_fail', {'room': roomID})
