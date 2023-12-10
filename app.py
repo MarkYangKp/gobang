@@ -20,7 +20,19 @@ userData = GetUsersInfo()
 @app.route("/",methods=['GET', 'POST'])
 def index():
     data = GetUsersInfo()
+    
+        
     return render_template("index.html",rankData=data)
+@app.route("/GetRank",methods=['GET', 'POST'])
+def GetRank():
+    data = GetUsersInfo()
+    if request.method == "POST":
+        postData = request.json
+        user = {}
+        for item in data:
+            if str(postData["userID"]) == str(item["userID"]):
+                return item
+        
 
 @app.route("/setusername",methods=["POST"])
 def SetUserName():
