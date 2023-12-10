@@ -89,7 +89,6 @@ def newRoom(data):
 def roomList():
     room_data = []
     current = shareData.rooms.head
-    print(userData)
     while current is not None:
         #根据userID遍历userData，获取userName
         for user in userData:
@@ -103,7 +102,6 @@ def roomList():
             'player2': current.player2_name
         })
         current = current.next
-    print(room_data)
     emit('room_list',room_data)
 
 
@@ -146,6 +144,8 @@ def leaveRoom(data):
     roomID = data['roomID']
     player = data['userID']
     current = shareData.rooms.get_room(roomID)
+    print(current.playerNum+'66666666666666666')
+    print(player)
     if current.playerNum == '11':
         if player == current.player1:
             current.player1 = ''
@@ -159,10 +159,12 @@ def leaveRoom(data):
         if player == current.player1:
             current.player1 = ''
             shareData.rooms.delete_room(roomID)
+            print('delete room!')
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
         elif player == current.player2:
             current.player2 = ''
             shareData.rooms.delete_room(roomID)
+            print('delete room!')
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
 
 

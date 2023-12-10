@@ -655,12 +655,11 @@ function isExitRoom(e) {
     if (isExitRoom == "1") {
         var data = {
             roomID,
-            userID,
-            isExitRoom
+            userID
         }
         console.log("111")
 
-        // socketio.emit("ExitRoom", data)
+        socketio.emit("leaveRoom", data)
         window.location.href = "/roomList?userID="+userID
     }else{
         document.getElementById("messageBox").remove()

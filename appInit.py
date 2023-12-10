@@ -32,6 +32,10 @@ def GetUsersInfo():
 def Score(category, player,roomID):
     userData = GetUsersInfo()
     current = shareData.rooms.get_room(roomID)
+    if player == 1:
+        player = current.player1
+    else:
+        player = current.player2
     if category == 'AdmitDefeat':
         for user in userData:
             
@@ -54,23 +58,21 @@ def Score(category, player,roomID):
                 
                 if user['userID'] == current.player1:
                     user['win'] += 1
-                    userData[i] = user
+                    user['score']+=len(current.moves)
                     break
 
 
     elif category == 'Peace':
-        current = shareData.rooms.get_room(roomID)
         for user in userData:
-            
             if current.player1 == user['userID'] or current.player2 == user['userID']:
                 user['peace'] += 1
                 user['score'] += int(len(current.moves)/2)
 
 
     elif category =='win':
-        current = shareData.rooms.get_room(roomID) 
         for user in userData:
             if player == user['userID']: 
+                print('赢！！！')
                 user['win'] += 1
                 user['score']+=len(current.moves)
                 break
@@ -78,12 +80,14 @@ def Score(category, player,roomID):
         if player == current.player1:
             for user in userData:
                 if user['userID'] == current.player2:
+                    print('输！！！')
                     user['fail'] += 1
                     user['score'] -=len(current.moves)
                     break
         else:
             for user in userData:
                 if user['userID'] == current.player1:
+                    print('输！！！')
                     user['fail'] += 1
                     user['score'] -=len(current.moves)
                     break  
