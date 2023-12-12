@@ -241,10 +241,15 @@ document.addEventListener("DOMContentLoaded", function () {
     socketio = io(LocalUrl);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
+        console.log(res)
         if (userID == res.player1) {
             player = 1
+            document.getElementById("palyer1name").innerText = res.userNames[0]
+            document.getElementById("palyer2name").innerText = res.userNames[1]
         } else if (userID = res.player2) {
             player = 2
+            document.getElementById("palyer1name").innerText = res.userNames[0]
+            document.getElementById("palyer2name").innerText = res.userNames[1]
         }
         console.log(player)
         if (res.state == 1) {
@@ -259,6 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log(res1.shareData)
                 var row = res1.row;
                 var col = res1.col;
+
                 var playerType = res1.player
                 if (playerType == 1 && player == 2) {
                     isPlay = 1;
