@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 CORS(app) 
 socketio = SocketIO(app, cors_allowed_origins='*')
 
-userData = GetUsersInfo()
+
 
 
 @app.route("/",methods=['GET', 'POST'])
@@ -55,7 +55,7 @@ def SetUserName():
             "userName": data['userName']
         }
         usersInfo.append(userInfo)
-        with open("E:\\Projects\\gobang\\userData.json", 'w',encoding="utf8") as file:
+        with open("userData.json", 'w',encoding="utf8") as file:
             file.write(json.dumps(usersInfo))
         return {
             "code":1
@@ -83,16 +83,17 @@ def newRoom(data):
     playerNum = ''
     moves=[]
     isAgainGame = []
-    player1_name = ''
+    player1_name = data['userName']
     player2_name = ''
     roomID = str(random.randint(100000, 999999))
     shareData.rooms.add_room(roomID,player1,player2,playerNum,moves,isAgainGame,player1_name,player2_name)
-    emit('room_created', {'player1': player1, 'player2': player2, 'roomID': roomID, 'state': 0},broadcast=True)
+    emit('room_created', {'player1': player1_name, 'player2': player2_name, 'roomID': roomID, 'state': 0, "pid1":player1,"pid2":player2},broadcast=True)
 
 
 @socketio.on('roomList')
 def roomList():
     room_data = []
+    userData = GetUsersInfo()
     current = shareData.rooms.head
     while current is not None:
         #根据userID遍历userData，获取userName
@@ -115,6 +116,7 @@ def joinRoom(data):
     player = data['userID'] #请求加入房间者的userID
     roomID = data['roomID']
     current = shareData.rooms.get_room(roomID)
+    userData = GetUsersInfo()
     if current is not None:
         if current.playerNum == '':
             current.playerNum += '1'
@@ -132,6 +134,7 @@ def joinRoom(data):
                 for user in userData:
                     if user['userID'] == player:
                         current.player2_name = user['userName']
+                print(current.player1_name,current.player2_name)
                 userNames=[current.player1_name,current.player2_name]
                 
                 emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1, 'userNames':userNames}, broadcast=True)
@@ -285,14 +288,17 @@ def AgainGame(data):
     current = shareData.rooms.get_room(roomID)
     print(current.isAgainGame)
     if isAgain == "1":
-        current.isAgainGame.append(userID)
+        if userID not in current.isAgainGame:
+            current.isAgainGame.append(userID)
 
     if len(current.isAgainGame) == 2:
         emit("AgainGame"+roomID,{"againGame":1, "isAgain":isAgain},broadcast=True)
         current.isAgainGame = []
+        
     else:
         emit("AgainGame"+roomID,{"againGame":0, "isAgain":isAgain},broadcast=True)
 
 
 if __name__ == '__main__':
-    socketio.run(app,host="0.0.0.0",port=5000)
+    socketio.run(app,port=5000)
+ 

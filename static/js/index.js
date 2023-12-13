@@ -89,7 +89,7 @@ function SetName(e) {
 
         // 构建要发送的数据
         const data = {
-            userID: userID,
+            userID: String(userID),
             userName: userName
         };
 
