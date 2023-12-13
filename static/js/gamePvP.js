@@ -241,10 +241,15 @@ document.addEventListener("DOMContentLoaded", function () {
     socketio = io(LocalServer);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
+        console.log(res)
         if (userID == res.player1) {
             player = 1
+            document.getElementById("palyer1name").innerText = res.userNames[0]
+            document.getElementById("palyer2name").innerText = res.userNames[1]
         } else if (userID = res.player2) {
             player = 2
+            document.getElementById("palyer1name").innerText = res.userNames[0]
+            document.getElementById("palyer2name").innerText = res.userNames[1]
         }
         console.log(player)
         if (res.state == 1) {
@@ -259,6 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log(res1.shareData)
                 var row = res1.row;
                 var col = res1.col;
+
                 var playerType = res1.player
                 if (playerType == 1 && player == 2) {
                     isPlay = 1;
@@ -318,6 +324,8 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 });
 
+
+
 //生成再来一局提示框
 function CreateAgainBox(contentText) {
     function eventHandler(event) {
@@ -350,16 +358,17 @@ function CreateAgainBox(contentText) {
 
     var msgBut1 = document.createElement('div');
     msgBut1.className = 'msgBut';
-    msgBut1.innerHTML = '<span>是</span>';
+    msgBut1.innerText = "是"
     msgBut1.dataset.isagain = "1"
     msgBut1.addEventListener('click', isAgain)
+    // msgBut1.onclick = isAgain
 
     var msgBut2 = document.createElement('div');
     msgBut2.className = 'msgBut';
-    msgBut2.innerHTML = '<span>否</span>';
+    msgBut2.innerText = "否"
     msgBut2.dataset.isagain = "0"
     msgBut2.addEventListener('click', isAgain)
-
+    // msgBut2.onclick = isAgain
     msgActionDiv.appendChild(msgBut1);
     msgActionDiv.appendChild(msgBut2);
 
@@ -397,12 +406,13 @@ function CreateMessageBox(contentText, isShowBut,defFunction) {
     msgBut1.innerText = "是"
     msgBut1.dataset.isaccept = "1"
     msgBut1.addEventListener("click", defFunction)
+    // msgBut1.onclick = defFunction
     var msgBut2 = document.createElement("div")
     msgBut2.classList.add("msgBut")
     msgBut2.innerText = "否"
     msgBut2.dataset.isaccept = "0"
     msgBut2.addEventListener("click", defFunction)
-
+    // msgBut2.onclick = defFunction
     msgAction.appendChild(msgBut1)
     msgAction.appendChild(msgBut2)
 
@@ -440,12 +450,13 @@ function CreatePeaceMessageBox(contentText, isShowBut) {
     msgBut1.innerText = "是"
     msgBut1.dataset.isaccept = "1"
     msgBut1.addEventListener("click", IsPeace)
+    // msgBut1.onclick = IsPeace
     var msgBut2 = document.createElement("div")
     msgBut2.classList.add("msgBut")
     msgBut2.innerText = "否"
     msgBut2.dataset.isaccept = "0"
     msgBut2.addEventListener("click", IsPeace)
-
+    // msgBut2.onclick = IsPeace
     msgAction.appendChild(msgBut1)
     msgAction.appendChild(msgBut2)
 
@@ -650,12 +661,11 @@ function isExitRoom(e) {
     if (isExitRoom == "1") {
         var data = {
             roomID,
-            userID,
-            isExitRoom
+            userID
         }
         console.log("111")
 
-        // socketio.emit("ExitRoom", data)
+        socketio.emit("leaveRoom", data)
         window.location.href = "/roomList?userID="+userID
     }else{
         document.getElementById("messageBox").remove()

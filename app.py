@@ -5,6 +5,7 @@ from checkLine import check_win
 import shareData
 import json
 from appInit import GetUsersInfo
+from appInit import Score
 
 
 
@@ -13,12 +14,25 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 
 socketio = SocketIO(app, cors_allowed_origins='*')
 
+userData = GetUsersInfo()
 
 
 @app.route("/",methods=['GET', 'POST'])
 def index():
     data = GetUsersInfo()
+    
+        
     return render_template("index.html",rankData=data)
+@app.route("/GetRank",methods=['GET', 'POST'])
+def GetRank():
+    data = GetUsersInfo()
+    if request.method == "POST":
+        postData = request.json
+        user = {}
+        for item in data:
+            if str(postData["userID"]) == str(item["userID"]):
+                return item
+        
 
 @app.route("/setusername",methods=["POST"])
 def SetUserName():
@@ -56,7 +70,9 @@ def showRoomList():
 def gamePvP():
     return render_template("gamePvP.html")
 
-
+@app.route("/gamePvE")
+def gamePvE():
+    return render_template("gamePvE.html")
 @socketio.on('newRoom')
 def newRoom(data):  
     player1 = data['userID']
@@ -75,8 +91,6 @@ def newRoom(data):
 def roomList():
     room_data = []
     current = shareData.rooms.head
-    userData = GetUsersInfo()
-    print(userData)
     while current is not None:
         #根据userID遍历userData，获取userName
         for user in userData:
@@ -90,7 +104,6 @@ def roomList():
             'player2': current.player2_name
         })
         current = current.next
-    print(room_data)
     emit('room_list',room_data)
 
 
@@ -103,12 +116,29 @@ def joinRoom(data):
         if current.playerNum == '':
             current.playerNum += '1'
             # 新建房间时已进行player1的赋值
-            emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0}, broadcast=True)
+            # 根据userID获取玩家名字
+            for user in userData:
+                if user['userID'] == player:
+                    current.player1_name = user['userName']
+            userNames=[current.player1_name,""]
+            emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
         elif current.playerNum == '1':
             if player != current.player1:
                 current.player2 = player
                 current.playerNum += '1'
-                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1}, broadcast=True)
+                for user in userData:
+                    if user['userID'] == player:
+                        current.player2_name = user['userName']
+                userNames=[current.player1_name,current.player2_name]
+                
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1, 'userNames':userNames}, broadcast=True)
+            else:
+                for user in userData:
+                    if user['userID'] == player:
+                        current.player1_name = user['userName']
+                userNames=[current.player1_name,""]
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': '', 'room': roomID, 'state': 0,'userNames':userNames}, broadcast=True)
+ 
         else:
             emit('joinRoom_fail', {'room': roomID})
     else:
@@ -120,6 +150,8 @@ def leaveRoom(data):
     roomID = data['roomID']
     player = data['userID']
     current = shareData.rooms.get_room(roomID)
+    print(current.playerNum+'66666666666666666')
+    print(player)
     if current.playerNum == '11':
         if player == current.player1:
             current.player1 = ''
@@ -133,10 +165,12 @@ def leaveRoom(data):
         if player == current.player1:
             current.player1 = ''
             shareData.rooms.delete_room(roomID)
+            print('delete room!')
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
         elif player == current.player2:
             current.player2 = ''
             shareData.rooms.delete_room(roomID)
+            print('delete room!')
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
 
 
@@ -159,6 +193,7 @@ def checkWin(data):
     current = shareData.rooms.get_room(roomID)
     # print(player,current.moves[-1][0],current.moves[-1][1],board_data)
     if(check_win(player,current.moves[-1][0],current.moves[-1][1],board_data)):
+        Score("win",player,roomID)
         emit('Win'+roomID,{'winer':current.moves[-1][2],'roomID':roomID,'status':1},broadcast=True)
 
 
@@ -191,6 +226,24 @@ def AcceptRepentance(data):
 def AdmitDefeat(data):
     roomID = data['roomID']
     player = data['player']
+    # 积分操作
+    Score("AdmitDefeat",player,roomID)
+    # 一方认输，fail+1
+    # for user in userData:
+    #     if user['userID'] == player:
+    #         user['fail']+=1
+    # current = shareData.rooms.get_room(roomID)
+    # # 另一方，win+1
+    # if player == current.player1:
+    #     for user in userData:
+    #         if user['userID'] == current.player2:
+    #             user['win']+=1
+    #             break
+    # else:
+    #     for user in userData:
+    #         if user['userID'] == current.player1:
+    #             user['win']+=1
+    #             break
     emit("AdmitDefeat"+roomID,{"player":player},broadcast=True)
 
 
@@ -203,7 +256,6 @@ def Peace(data):
     emit('Peace'+roomID,{"roomID":roomID,"player":player},broadcast=True)
 
 
-
 #确认求和
 @socketio.on('AcceptPeace')
 def AcceptPeace(data):
@@ -211,8 +263,10 @@ def AcceptPeace(data):
     roomID = data['roomID']
     player = data['player']
     isAccept = data['isAccept']
-    print(type(isAccept))
+    
     if(isAccept == "1"):
+        current = shareData.rooms.get_room(roomID)
+        Score("Peace",player,roomID)
         emit("AcceptPeace"+roomID,{"result":1},broadcast=True)
     else:
         emit("AcceptPeace"+roomID,{"result":0},broadcast=True)

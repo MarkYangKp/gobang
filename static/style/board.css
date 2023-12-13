@@ -1,0 +1,243 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#main {
+    display: flex;
+    flex-direction: row;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 1px rgba(0, 0, 0.5);
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+}
+
+#boardPad {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 580px;
+    border: solid 2px black;
+    justify-content: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.cell-black {
+    width: 30px;
+    height: 30px;
+    background-color: black;
+    border-radius: 100%;
+    box-shadow: 0 0 2px rgba(0, 0, 0.8);
+    /* margin: 1px; */
+}
+
+.cell-white {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 100%;
+    box-shadow: 0 0 2px rgba(0, 0, 0.8);
+    /* margin: 1px; */
+}
+
+.cell-null {
+    width: 30px;
+    height: 30px;
+    /* background-color: #e5e5e5; */
+    position: relative;
+}
+
+.cell-null::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background-color: black;
+}
+
+.cell-null::before {
+    content: "";
+    position: absolute;
+    background-color: black;
+    width: 2px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cell-enter {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    border: solid 2px red;
+}
+
+.cell-enter::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background-color: black;
+}
+
+.cell-enter::before {
+    content: "";
+    position: absolute;
+    background-color: black;
+    width: 2px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.isPlayChess {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tipText {
+    font-size: 30px;
+}
+
+.tipButBox {
+    display: flex;
+    flex-direction: column;
+}
+
+.tipBut {
+    width: 40px;
+    height: 15px;
+    box-shadow: 0 0 6px rgba(0, 0, 0.5);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.tipBut:active {
+    width: 40px;
+    height: 15px;
+    box-shadow: 0 0 1px rgba(0, 0, 0.5);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.userBox {
+    /* position: absolute;
+    left: 50%; */
+    display: flex;
+    flex-direction: row;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: row;
+    width: 150px;
+    box-shadow: 0 0 3px rgba(0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.await {
+    background-color: red;
+}
+
+.play {
+    background-color: forestgreen;
+}
+
+.messageBox {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 200px;
+    /* padding: 30px; */
+    /* justify-content: center; */
+    align-items: center;
+    background-color: antiquewhite;
+}
+.msg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.msgAction {
+    display: flex;
+    flex-direction: row;
+}
+
+.msgBut {
+    user-select: none; /* 阻止文字选中 */
+
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0.5);
+}
+
+.msgBut:hover {
+    box-shadow: 0 0 3px rgba(0, 0, 0.5);
+}
+
+.msgBut:active {
+    box-shadow: 0 0 0px rgba(0, 0, 0.5);
+}
+.AgainBox{
+    z-index: 10;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 500px) {
+    #main {
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 10px;
+        box-shadow: 0 0 1px rgba(0, 0, 0.5);
+    }
+    .isPlayChess {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .tipButBox {
+        display: flex;
+        flex-direction: row;
+    }
+}

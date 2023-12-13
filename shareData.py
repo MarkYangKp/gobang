@@ -45,6 +45,7 @@ class RoomList:
     
 
     def delete_room(self,roomID):
+        print('执行delete_room')
         current = self.head
         prev = None
         while current is not None:

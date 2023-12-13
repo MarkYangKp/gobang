@@ -5,14 +5,13 @@ const BackUrl = LocalServer
 
 var userName = null
 
-
 function createRoomItem(roomID, blackPlayer, whitePlayer) {
     // 创建各个元素
     var roomItem = document.createElement('div');
     roomItem.classList.add('roomItem');
     // roomItem.setAttribute('data-roomid', roomID);
     roomItem.dataset.roomid = roomID
-    
+
 
     var roomIDBox = document.createElement('div');
     roomIDBox.classList.add('roomIDBox');
@@ -46,6 +45,7 @@ function createRoomItem(roomID, blackPlayer, whitePlayer) {
     roomItem.appendChild(separator);
     roomItem.appendChild(userList);
     roomItem.addEventListener('click', joinRoom);
+    // roomItem.onclick = joinRoom
     return roomItem;
 }
 
@@ -64,7 +64,7 @@ function createUserBox(userType, userName) {
 
     userBox.appendChild(userTitle);
     userBox.appendChild(userNameElement);
-
+    userBox.addEventListener('click', joinRoom);
     return userBox;
 }
 
@@ -79,10 +79,14 @@ function addRoomToList(roomID, blackPlayer, whitePlayer) {
 let socket = null
 
 function joinRoom(event) {
+    // 检查点击的元素是否是最外层div或其内部元素
+    var target = event.target.closest('.roomItem');
+    if (target) {
         //建立socket连接
-        var roomID = event.target.dataset.roomid
+        var roomID = target.dataset.roomid
         console.log(event)
         window.location.href = "./gamePvP?roomID=" + roomID
+    }
 
 }
 
@@ -93,12 +97,15 @@ function createRoom() {
     const userID = localStorage.getItem('user_id').toString();
     data = {
         'userID': userID,
-        userName:userName
+        userName: userName
     }
     socket.emit("newRoom", data);
 }
 document.addEventListener("DOMContentLoaded", function () {
     userName = localStorage.getItem('user_name');
+
+    document.getElementById("nickNameBox").innerHTML = "<span>" + userName + "</span>"
+
     socket = io(BackUrl);
     socket.emit("roomList");
     socket.on("room_list", (res) => {

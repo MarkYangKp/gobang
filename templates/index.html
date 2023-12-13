@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>五子棋-首页</title>
     <link rel="stylesheet" type="text/css" href="../static/style/index.css">
-    <link rel="stylesheet" type="text/css" href="../static/style/nav.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/style/nav.css" />
 
 </head>
 
 <body>
-   
+
     <div id="header">
-         <div class="NavBox">
+        <div class="NavBox">
             <div class="navItem"><span>首页</span></div>
             <div class="navItem"><span>关于</span></div>
-         </div>
+        </div>
         <div class="UserBox">
             <div class="avatarBox">
-                <img class="imgAvatar"/>
+                <img class="imgAvatar" />
             </div>
             <div class="nickNameBox">
                 <span id="userNameSpan">Mark</span>
@@ -29,20 +29,22 @@
     <div class="SetName" id="SetNameBox">
         <div class="SetName-title"><span>您是谁？</span></div>
         <div class="SetName-inputBox">
-            <input placeholder="昵称" value="" id="inputBox" class="inputBox"/>
+            <input placeholder="昵称" value="" id="inputBox" class="inputBox" />
         </div>
-        <div class="SetNameButton" ><div id="SetNameButton" >继续</div></div>
+        <div class="SetNameButton">
+            <div id="SetNameButton">继续</div>
+        </div>
         <div class="exitBox">
             <div class="SetName-exit" id="SetName-exit"></div>
         </div>
-        
+
     </div>
     <div id="overlay"></div>
     <div id="main">
         <div class="main-item">
             <div class="item-item">
                 <h1>五子棋</h1>
-                <img src="" class="imgImg"/>
+                <img src="" class="imgImg" />
             </div>
             <div class="item-item">
                 <div class="modelText">
@@ -52,36 +54,47 @@
                     <div id="pvpBut" onclick="modelCheck(event)" data-model="pvp" class="Butt">人人对弈</div>
                 </div>
                 <div class="modelBox">
-                    <div id="pveBut" data-model="pve"onclick="modelCheck(event)" class="Butt">人机对弈</div>
+                    <div id="pveBut" data-model="pve" onclick="modelCheck(event)" class="Butt">人机对弈</div>
                 </div>
 
             </div>
         </div>
-        
-        
-        
-        <div class="main-item1">
+
+
+
+        <div class="main-item1" id="rankBox">
             <div style="text-align: center;">
-                <h2 >排行榜</h2>
+                <h2>排行榜</h2>
             </div>
-            
-            <div class="rankBox">
-                <div class="rankBox-item"><span>排名</span></div>
-                <div class="rankBox-item"><span>昵称</span></div>
-                <div class="rankBox-item"><span>胜</span>/<span>败</span>/<span>平</span></div>
-                <div class="rankBox-item"><span>得分</span></div> 
+            <div class="main-item1"  style="overflow: scroll;height: 300px;">
+                <div class="rankBox">
+                    <div class="rankBox-item"><span>排名</span></div>
+                    <div class="rankBox-item"><span>昵称</span></div>
+                    <div class="rankBox-item"><span>胜</span>/<span>败</span>/<span>平</span></div>
+                    <div class="rankBox-item"><span>得分</span></div>
+                </div>
+
+                {% for item in rankData %}
+                <div class="rankBox">
+                    <div class="rankBox-item"><span>{{loop.index}}</span></div>
+                    <div class="rankBox-item"><span>{{item.userName}}</span></div>
+                    <div class="rankBox-item">
+                        <span>{{item.win}}</span>/<span>{{item.peace}}</span>/<span>{{item.fail}}</span></div>
+                    <div class="rankBox-item"><span>{{item.score}}</span></div>
+                </div>
+                {% endfor %}
             </div>
-            
-            {% for item in rankData %}
-            <div class="rankBox">
-                <div class="rankBox-item"><span>{{loop.index}}</span></div>
-                <div class="rankBox-item"><span>{{item.userName}}</span></div>
-                <div class="rankBox-item"><span>{{item.win}}</span>/<span>{{item.peace}}</span>/<span>{{item.fail}}</span></div>
-                <div class="rankBox-item"><span>{{item.score}}</span></div>
-            </div>
-            {% endfor %}
+            <!-- <div class="userInfo">
+                <div class="rankBox">
+                    <div class="rankBox-item"><span></span></div>
+                    <div class="rankBox-item"><span></span></div>
+                    <div class="rankBox-item">
+                        <span></span>/<span></span>/<span></span></div>
+                    <div class="rankBox-item"><span></span></div>
+                </div> 
+            </div> -->
         </div>
-        
+
     </div>
     <script src="../static/js/index.js"></script>
 </body>
