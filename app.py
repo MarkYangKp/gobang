@@ -70,7 +70,9 @@ def showRoomList():
 def gamePvP():
     return render_template("gamePvP.html")
 
-
+@app.route("/gamePvE")
+def gamePvE():
+    return render_template("gamePvE.html")
 @socketio.on('newRoom')
 def newRoom(data):  
     player1 = data['userID']
