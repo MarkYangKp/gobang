@@ -1,3 +1,6 @@
+const www = 'http://115.159.211.13:5000'
+const LocalUrl = "http://127.0.0.1:5000"
+const LocalServer = www
 document.addEventListener('DOMContentLoaded', function () {
     const userName = IsSetName()
     if (userName) {
@@ -16,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("*   **   **  **   **   **   ** **        **   **        **  *");
     console.log("* ****   ******  ****  **    ****        *******   *******  *");
     console.log("************************************************************");
-
+    console.log("Email: markyangkp@outlook.com")
 
 
 
@@ -80,7 +83,7 @@ function SetName(e) {
         var userName = inputBox.value
         localStorage.setItem('user_name', userName);
         // 定义请求的URL
-        const LocalServer = "http://127.0.0.1:5000"
+        
         const url = LocalServer + '/setusername';
 
         // 构建要发送的数据
@@ -129,8 +132,7 @@ function GetRankData() {
 
     } else {
         // 定义请求的URL
-        const LocalServer = "http://127.0.0.1:5000/GetRank"
-
+        const url = LocalServer + '/GetRank';
         // 构建要发送的数据
         const data = {
             userID: String(userID),
@@ -138,7 +140,7 @@ function GetRankData() {
         };
 
         // 发起POST请求
-        fetch(LocalServer, {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json' // 根据实际情况设置请求头

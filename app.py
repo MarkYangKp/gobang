@@ -117,21 +117,25 @@ def joinRoom(data):
             # 根据userID获取玩家名字
             for user in userData:
                 if user['userID'] == player:
-                    current.player1_name == user['userName']
-            emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userName':current.player1_name}, broadcast=True)
+                    current.player1_name = user['userName']
+            userNames=[current.player1_name,""]
+            emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
         elif current.playerNum == '1':
             if player != current.player1:
                 current.player2 = player
                 current.playerNum += '1'
                 for user in userData:
                     if user['userID'] == player:
-                        current.player2_name == user['userName']
-                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1, 'userName':current.player2_name}, broadcast=True)
+                        current.player2_name = user['userName']
+                userNames=[current.player1_name,current.player2_name]
+                
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1, 'userNames':userNames}, broadcast=True)
             else:
                 for user in userData:
                     if user['userID'] == player:
-                        current.player1_name == user['userName']
-                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': '', 'room': roomID, 'state': 0,'userName':current.player1_name}, broadcast=True)
+                        current.player1_name = user['userName']
+                userNames=[current.player1_name,""]
+                emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': '', 'room': roomID, 'state': 0,'userNames':userNames}, broadcast=True)
  
         else:
             emit('joinRoom_fail', {'room': roomID})

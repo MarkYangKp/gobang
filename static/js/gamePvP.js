@@ -234,17 +234,22 @@ document.addEventListener("DOMContentLoaded", function () {
         userID: userID,
         userName: userName
     }
-    const BackUrl = 'http://115.159.211.13:5001'
+    const BackUrl = 'http://115.159.211.13:5000'
     const LocalUrl = "http://127.0.0.1:5000"
     const LocalServer = "http://10.1.1.99:5000"
     // BackUrl LocalUrl
-    socketio = io(LocalUrl);
+    socketio = io(BackUrl);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
+        console.log(res)
         if (userID == res.player1) {
             player = 1
+            document.getElementById("palyer1name").innerText = res.userNames[0]
+            document.getElementById("palyer2name").innerText = res.userNames[1]
         } else if (userID = res.player2) {
             player = 2
+            document.getElementById("palyer1name").innerText = res.userNames[0]
+            document.getElementById("palyer2name").innerText = res.userNames[1]
         }
         console.log(player)
         if (res.state == 1) {
@@ -259,6 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log(res1.shareData)
                 var row = res1.row;
                 var col = res1.col;
+
                 var playerType = res1.player
                 if (playerType == 1 && player == 2) {
                     isPlay = 1;
