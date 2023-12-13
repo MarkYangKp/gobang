@@ -1,5 +1,5 @@
 const LocalUrl = "http://127.0.0.1:5000"
-const www = 'http://115.159.211.13:5001'
+const www = 'http://115.159.211.13:5000'
 const LocalServer = "http://10.1.1.99:5000"
 const BackUrl = LocalUrl
 
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
     socket.on("room_created", res => {
         addRoomToList(res.roomID, res.player1, res.player2);
         //先添加房间之后再自动进入，体现一下这个过程
-        if (res.player1 == localStorage.getItem("user_id")) {
+        if (res.pid1 == localStorage.getItem("user_id")) {
             window.location.href = "./gamePvP?roomID=" + res.roomID
         }
 

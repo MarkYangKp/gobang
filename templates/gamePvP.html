@@ -12,7 +12,7 @@
     
 </head>
 <body>
-    
+   
     <div id="header" class="header">
         <!-- <div class="NavBox">
            <div class="navItem" id="indexPage"><span>首页</span></div>
@@ -39,7 +39,9 @@
        </div> -->
    </div>
     <div id="main">
-        
+        <div class="subtitle">
+            <span>快点啊！</span>
+        </div>
         <div id="boardPad">
             <div class="cell-black cell"></div>
             <div class="cell-white cell"></div>
@@ -58,6 +60,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- <div class="messageBox" id="messageBox">
             <div class="msgTitle">
                 <h2>提示</h2>
@@ -93,7 +96,14 @@
             </div>
         </div> -->
     </div>
-
+    
+    <div class="chatBox" id="chatBox">
+        <div><span style="font-size: 25px;">发送消息:</span></div>
+        <div class="inputBox">
+            <input value="" class="input" id="input" />
+        </div>
+        <div class="sendBox" id="sendBut">发送</div>
+    </div>
     <script src="../static/js/gamePvP.js"></script>
 </body>
 </html>

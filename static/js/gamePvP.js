@@ -60,12 +60,10 @@ function handleCellClick(event) {
     if (player == 1) {
 
         boardData[row][col] = 1
-        PlayMusic("failChess")
-
+        
     } else if (player == 2) {
 
         boardData[row][col] = 2
-        PlayMusic("failChess")
 
     }
     var data = {
@@ -234,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
         userID: userID,
         userName: userName
     }
-    const BackUrl = 'http://115.159.211.13:5001'
+    const BackUrl = 'http://115.159.211.13:5000'
     const LocalUrl = "http://127.0.0.1:5000"
     const LocalServer = "http://10.1.1.99:5000"
     // BackUrl LocalUrl
@@ -279,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 StatusChecking();
                 boardData[row][col] = playerType
                 RenderBoard();
-
+                PlayMusic("failChess")
                 chessManual = {
                     "userType": playerType,
                     "pos": {
@@ -649,6 +647,7 @@ function addClick() {
     document.getElementById("peace").addEventListener("click", peace)
     document.getElementById("admitDefeat").addEventListener("click", admitDefeat)
     document.getElementById("exitRoom").addEventListener("click", exitRoom)
+    document.getElementById("sendBut").addEventListener("click",sendMessage)
 }
 
 function exitRoom() {
@@ -690,6 +689,20 @@ function PlayMusic(musicType) {
     // 播放音乐
     audioElement.play();
 }
+
+// 聊天弹幕
+function sendMessage()
+{
+    var text = document.getElementById("input").value
+    var subtitleBox = document.createElement("div")
+    subtitleBox.classList.add("subtitle")
+    subtitleBox.innerHTML = "<span>"+text+"</span>"
+    subtitleBox.addEventListener('animationend', function(e) {
+        e.target.remove();
+      });
+    document.getElementById("main").appendChild(subtitleBox)
+}
+
 
 addClick()
 InitBoard()
