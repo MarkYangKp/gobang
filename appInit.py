@@ -10,13 +10,13 @@ def bubble_sort(data):
                 data[j], data[j + 1] = data[j + 1], data[j]
     for i in range(n):
         data[i]['rank'] = i + 1
-    with open('userData.json', 'w',encoding="utf8") as file: 
+    with open("E:\\Projects\\gobang\\userData.json", 'w',encoding="utf8") as file: 
         file.write( json.dumps(data))
     # return data
 
 def GetUsersInfo():
     # 读取JSON文件
-    with open('userData.json', 'r',encoding="utf8") as file:
+    with open("E:\\Projects\\gobang\\userData.json", 'r',encoding="utf8") as file:
         data = json.load(file)
     # bubble_sort(data)
     return data

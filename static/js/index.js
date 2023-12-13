@@ -1,3 +1,7 @@
+const www = 'http://115.159.211.13:5000'
+const LocalUrl = "http://127.0.0.1:5000"
+const LocalServer1 = "http://10.1.1.99:5000"
+const LocalServer = LocalUrl
 document.addEventListener('DOMContentLoaded', function () {
     const userName =  IsSetName()
     if(userName){
@@ -7,6 +11,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     document.getElementById("SetNameButton").addEventListener("click", SetName)
     document.getElementById("SetName-exit").addEventListener("click", HiedSetNameBox)
+    GetRankData()
+    //join us
+    console.log("************************************************************");
+    console.log("*  ****  ******  ****  ****    **        **   **   *******  *");
+    console.log("*   **   **  **   **   ** **   **        **   **   **       ");
+    console.log("*   **   **  **   **   **  **  **        **   **   *******  *");
+    console.log("*   **   **  **   **   **   ** **        **   **        **  *");
+    console.log("* ****   ******  ****  **    ****        *******   *******  *");
+    console.log("************************************************************");
+    console.log("Email: markyangkp@outlook.com")
+
+
+
 })
 
 // const outils = require("./outils.min.js")
@@ -67,10 +84,8 @@ function SetName(e) {
         var userName = inputBox.value
         localStorage.setItem('user_name', userName);
         // 定义请求的URL
-        const LocalServer = "http://127.0.0.1:5000"
-        const LocalServer1 = "http://10.1.1.99:5000"
-
-        const url = LocalServer1+'/setusername';
+        
+        const url = LocalServer + '/setusername';
 
         // 构建要发送的数据
         const data = {
@@ -109,7 +124,88 @@ function SetName(e) {
         inputBox.value = ""
     }
 }
+function GetRankData() {
+    // 从localStorage获取用户ID
+    var userID = localStorage.getItem('user_id');
+    var userName = localStorage.getItem('user_name');
 
+    if (userID == undefined || userID == undefined) {
+
+    } else {
+        // 定义请求的URL
+        const url = LocalServer + '/GetRank';
+        // 构建要发送的数据
+        const data = {
+            userID: String(userID),
+            userName: userName
+        };
+
+        // 发起POST请求
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // 根据实际情况设置请求头
+            },
+            body: JSON.stringify(data) // 将数据转换为JSON字符串
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 处理响应数据
+                console.log(data);
+                CreatRankInfoBox(data.rank,data.userName,data.win,data.fail,data.peace,data.score)
+                // if (data.code == 1) {
+                //     document.getElementById("userNameSpan").innerText = userName
+                //     HiedSetNameBox()
+                //     window.location.href = "/"
+                // }
+            })
+            .catch(error => {
+                // 处理错误
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+
+    }
+}
+function CreatRankInfoBox(rank, username, win, fail, peace, score) {
+    // < div class="userInfo" >
+    //     <div class="rankBox">
+    //         <div class="rankBox-item"><span></span></div>
+    //         <div class="rankBox-item"><span></span></div>
+    //         <div class="rankBox-item">
+    //             <span></span>/<span></span>/<span></span></div>
+    //         <div class="rankBox-item"><span></span></div>
+    //     </div>
+    // </div >
+    var rankBoxitem1 = document.createElement("div")
+    rankBoxitem1.innerHTML = "<span>" + rank + "</span>"
+    rankBoxitem1.classList.add("rankBox-item")
+    var rankBoxitem2 = document.createElement("div")
+    rankBoxitem2.classList.add("rankBox-item")
+    rankBoxitem2.innerHTML = "<span>" + username + "</span>"
+    var rankBoxitem3 = document.createElement("div")
+    rankBoxitem3.classList.add("rankBox-item")
+    rankBoxitem3.innerHTML = "<span>"+win+"</span>/<span>"+fail+"</span>/<span>"+peace+"</span>"
+    var rankBoxitem4 = document.createElement("div")
+    rankBoxitem4.classList.add("rankBox-item")
+    rankBoxitem4.innerHTML = "<span>" + score + "</span>"
+
+    var rankBox = document.createElement("div") 
+    rankBox.classList.add("rankBox")
+    rankBox.appendChild(rankBoxitem1)
+    rankBox.appendChild(rankBoxitem2)
+    rankBox.appendChild(rankBoxitem3)
+    rankBox.appendChild(rankBoxitem4)
+
+    var userInfo =  document.createElement("div")
+    userInfo.classList.add("userInfo")
+    userInfo.appendChild(rankBox)
+    document.getElementById("rankBox").appendChild(userInfo)
+}
 function GetUserID() {
     // 从localStorage获取用户ID
     userID = localStorage.getItem('user_id');

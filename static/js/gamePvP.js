@@ -60,12 +60,10 @@ function handleCellClick(event) {
     if (player == 1) {
 
         boardData[row][col] = 1
-        PlayMusic("failChess")
-
+        
     } else if (player == 2) {
 
         boardData[row][col] = 2
-        PlayMusic("failChess")
 
     }
     var data = {
@@ -234,11 +232,11 @@ document.addEventListener("DOMContentLoaded", function () {
         userID: userID,
         userName: userName
     }
-    const BackUrl = 'http://115.159.211.13:5001'
+    const BackUrl = 'http://115.159.211.13:5000'
     const LocalUrl = "http://127.0.0.1:5000"
     const LocalServer = "http://10.1.1.99:5000"
     // BackUrl LocalUrl
-    socketio = io(LocalServer);
+    socketio = io(LocalUrl);
     socketio.emit("joinRoom", data)
     socketio.on("joinRoom_success" + roomID, (res) => {
         console.log(res)
@@ -279,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 StatusChecking();
                 boardData[row][col] = playerType
                 RenderBoard();
-
+                PlayMusic("failChess")
                 chessManual = {
                     "userType": playerType,
                     "pos": {

@@ -7,11 +7,11 @@ import json
 from appInit import GetUsersInfo
 from appInit import Score
 
-
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
-
+CORS(app) 
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 userData = GetUsersInfo()
@@ -52,7 +52,7 @@ def SetUserName():
             "userName": data['userName']
         }
         usersInfo.append(userInfo)
-        with open('userData.json', 'w',encoding="utf8") as file:
+        with open("E:\\Projects\\gobang\\userData.json", 'w',encoding="utf8") as file:
             file.write(json.dumps(usersInfo))
         return {
             "code":1
