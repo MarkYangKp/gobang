@@ -128,8 +128,8 @@ function GetRankData() {
     // 从localStorage获取用户ID
     var userID = localStorage.getItem('user_id');
     var userName = localStorage.getItem('user_name');
-
-    if (userID == undefined || userID == undefined) {
+    console.log(userName)
+    if (userName == null || userName== undefined) {
 
     } else {
         // 定义请求的URL

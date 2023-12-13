@@ -32,6 +32,9 @@ def GetRank():
         for item in data:
             if str(postData["userID"]) == str(item["userID"]):
                 return item
+        return {
+            "code":-1
+        }
         
 
 @app.route("/setusername",methods=["POST"])
