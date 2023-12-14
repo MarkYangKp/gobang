@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // BackUrl LocalUrl
     socketio = io(LocalUrl);
     socketio.emit("joinRoom", data)
-    
+
     socketio.on("joinRoom_success" + roomID, (res) => {
         console.log(res)
         if (userID == res.player1) {
@@ -315,6 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
             SubscriptPeace()
             SubscriptAdmitDefeat()
             ClientReceiveMsg()
+            ShowUserList()
         } else {
             isStart = false
             document.getElementById('boardPad').innerHTML = "<h1>等待中，未开始</h1>";
@@ -324,7 +325,12 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 });
 
-
+function ShowUserList() {
+    socketio.on("userList" + roomID, res => {
+        document.getElementById("palyer1name").innerText = res.userNames[0]
+        document.getElementById("palyer2name").innerText = res.userNames[1]
+    })
+}
 
 //生成再来一局提示框
 function CreateAgainBox(contentText) {
@@ -346,7 +352,7 @@ function CreateAgainBox(contentText) {
 
     var innerDiv2 = document.createElement('div');
     innerDiv2.className = 'msg';
-
+    innerDiv2.id = "msg"
     var spanElement = document.createElement('span');
     spanElement.className = 'msgContent';
     spanElement.textContent = '是否再来一局';
@@ -470,13 +476,16 @@ function CreatePeaceMessageBox(contentText, isShowBut) {
 }
 
 function repentance() {
-    var data = {
-        roomID: roomID,
-        player: player,
-        // boardData:boardData,
+    if (isPlay) {
+        var data = {
+            roomID: roomID,
+            player: player,
+            // boardData:boardData,
+        }
+        socketio.emit("repentance", data)
+    } else {
+        console.log("当前不可以悔棋")
     }
-    socketio.emit("repentance", data)
-
 }
 //订阅悔棋
 function IsRepentance() {
@@ -537,6 +546,8 @@ function isAgain(e) {
     }
 
     socketio.emit("AgainGame", data)
+
+    document.getElementById("msg").innerText = "正在等待对方回应"
 
 }
 //订阅是否重新开局
@@ -661,8 +672,8 @@ function isExitRoom(e) {
     var isExitRoom = e.target.dataset.isaccept;
     if (isExitRoom == "1") {
         var data = {
-            roomID:roomID,
-            userID:userID
+            roomID: roomID,
+            userID: userID
         }
         console.log("111")
 
@@ -697,17 +708,17 @@ function sendMessage() {
     var text = document.getElementById("input").value
 
     data = {
-        roomID:roomID,
-        userName:userName,
-        msg:text
+        roomID: roomID,
+        userName: userName,
+        msg: text
     }
 
-    socketio.emit("message",data)
+    socketio.emit("message", data)
 
     document.getElementById("input").value = ""
 }
 function ClientReceiveMsg() {
-    
+
     socketio.on("ClientReceiveMsg" + roomID, res => {
         console.log(res)
         if (res.code == 1) {
@@ -735,10 +746,10 @@ function ClientReceiveMsg() {
 
             chatLog.appendChild(oneChat)
         }
-        
+
     })
 }
-        
+
 addClick()
 InitBoard()
 RenderBoard()

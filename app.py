@@ -130,6 +130,7 @@ def joinRoom(data):
                     current.player1_name = user['userName']
             userNames=[current.player1_name,""]
             emit('joinRoom_success'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
+            emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
         elif current.playerNum == '1':
             if player != current.player1:
                 current.player2 = player
@@ -140,14 +141,16 @@ def joinRoom(data):
                 print(current.player1_name,current.player2_name)
                 userNames=[current.player1_name,current.player2_name]
                 
+                
                 emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': player, 'room': roomID, 'state': 1, 'userNames':userNames}, broadcast=True)
+                emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
             else:
                 for user in userData:
                     if user['userID'] == player:
                         current.player1_name = user['userName']
                 userNames=[current.player1_name,""]
                 emit('joinRoom_success'+roomID, {'player1': current.player1, 'player2': '', 'room': roomID, 'state': 0,'userNames':userNames}, broadcast=True)
- 
+                emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
         else:
             emit('joinRoom_fail', {'room': roomID})
     else:
@@ -166,12 +169,16 @@ def leaveRoom(data):
             current.player1 = ''
             current.player1_name = ""
             current.playerNum = '1'
+            userNames = ["",current.player2_name]
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+            emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
         elif player == current.player2:
             current.player2 = ''
             current.player2_name = ""
             current.playerNum = '1'
+            userNames=[current.player1_name,""]
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+            emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
     elif current.playerNum == '1':
         if player == current.player1:
             current.player1 = ''
