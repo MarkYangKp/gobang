@@ -1,7 +1,7 @@
 const LocalUrl = "http://127.0.0.1:5000"
 const www = 'http://115.159.211.13:5000'
 const LocalServer = "http://10.1.1.99:5000"
-const BackUrl = LocalUrl
+const BackUrl = www
 
 var userName = null
 

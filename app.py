@@ -325,5 +325,5 @@ def ReceiveMessage(data):
     emit("ClientReceiveMsg"+roomID,{"roomID":roomID,"userName":userName,"msg":msg,"code":1},broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app,port=5000)
+    socketio.run(app,host="0.0.0.0",port=5000)
  
