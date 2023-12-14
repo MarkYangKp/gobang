@@ -31,6 +31,7 @@ def GetRank():
         user = {}
         for item in data:
             if str(postData["userID"]) == str(item["userID"]):
+                item["code"] = 1
                 return item
         return {
             "code":-1
