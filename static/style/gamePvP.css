@@ -3,7 +3,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 #main {
@@ -296,6 +296,27 @@ body {
     100% {
         transform: translateX(-2880%);
     }
+}
+.chatLog{
+    /* align-items: center; */
+    display: flex;
+    flex-direction: column; 
+    height: 100px;
+    width: 200px;
+    overflow: scroll;
+    background-color: #e5e5e5;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0.5);
+}
+
+.oneChat{
+    display: flex;
+    flex-direction: row; 
+}
+#chat_username{
+
+}
+#chat_content{
+
 }
 
 @media screen and (max-width: 500px) {

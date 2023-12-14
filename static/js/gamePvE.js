@@ -77,8 +77,11 @@ function handleCellClick(event) {
 
     // isPlay = 0
     RenderBoard()
-    console.log(AI(boardData, row, col) )
-
+    // console.log(AI(boardData, row, col) )
+    // console.log(checkForThreeOnes(boardData, row, col, 1))
+    let aiMove = findBestMove(boardData);
+    console.log(aiMove)
+    return aiMove
 }
 function SendAndReceive() {
     socketio.emit()
@@ -94,7 +97,9 @@ function chooseBlock(event) {
             //否则清除上一次的样式，更新当前坐标样式
             if (lastBlock.col == col && lastBlock.row == row) {
                 //落子
-                handleCellClick(event)
+                var move = handleCellClick(event)
+                boardData[move.row][move.col] = 2
+                RenderBoard()
             } else {
                 //删除上一次方格的样式
                 if (lastBlock.lastEvent != null) {
@@ -363,9 +368,9 @@ function checkForThreeOnes(boardData, row, col, player) {
     return false;
 }
 
-function AI(row,col,player){
-    if(!checkForThreeOnes(boardData,row,col,player)){
-        
+function AI(row, col, player) {
+    if (!checkForThreeOnes(boardData, row, col, player)) {
+
     }
 }
 
@@ -375,4 +380,81 @@ function AI(row,col,player){
 // const col = /* 设置列数 */;
 // const board = /* 设置你的数组 */;
 // console.log(checkForFourOnes(board, row, col));
+
+function findBestMove(boardData) {
+    const size = 19;
+    let maxScore = 0;
+    let bestMove = { row: -1, col: -1 };
+
+    function isOnBoard(row, col) {
+        return row >= 0 && col >= 0 && row < size && col < size;
+    }
+
+    function evaluatePosition(row, col, player) {
+        // 对于给定的棋子，评估在(row, col)位置的得分
+        // 这里的评分规则可以根据具体情况进行调整
+        let score = 0;
+        // 检查水平、垂直和两个对角线方向
+        const directions = [
+            { dr: 0, dc: 1 }, // 水平
+            { dr: 1, dc: 0 }, // 垂直
+            { dr: 1, dc: 1 }, // 对角线1
+            { dr: 1, dc: -1 } // 对角线2
+        ];
+
+        directions.forEach(({ dr, dc }) => {
+            let count = 0;
+            for (let i = -4; i <= 4; i++) {
+                const r = row + i * dr;
+                const c = col + i * dc;
+                if (isOnBoard(r, c) && boardData[r][c] === player) {
+                    count++;
+                } else {
+                    count = 0;
+                }
+                if (count >= 5) score += 100; // 连成五子
+                else if (count === 4) score += 10; // 活四或冲四
+                else if (count === 3) score += 5; // 活三
+                // 其他情况可以根据需要添加
+            }
+        });
+
+        return score;
+    }
+
+    // 遍历棋盘上的每一个空位
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+            // 如果当前位置已经有棋子，跳过
+            if (boardData[row][col] !== 0) continue;
+
+            // 评估如果在此位置放置黑棋（玩家）的得分
+            const playerScore = evaluatePosition(row, col, 1);
+            // 评估如果在此位置放置白棋（AI）的得分
+            const aiScore = evaluatePosition(row, col, 2);
+
+            // 选择一个分数更高的位置
+            const score = Math.max(playerScore, aiScore);
+            if (score > maxScore) {
+                maxScore = score;
+                bestMove = { row, col };
+            }
+        }
+    }
+
+    // 如果没有找到最佳移动，随机选择一个空位
+    if (bestMove.row === -1 && bestMove.col === -1) {
+        do {
+            bestMove.row = Math.floor(Math.random() * size);
+            bestMove.col = Math.floor(Math.random() * size);
+        } while (boardData[bestMove.row][bestMove.col] !== 0);
+    }
+
+    return bestMove;
+}
+// // 使用示例
+// let boardData = [
+//     // 初始化一个19x19的棋盘数组，全部填充为0
+//     // ...
+// ];
 

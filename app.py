@@ -89,9 +89,7 @@ def newRoom(data):
     shareData.rooms.add_room(roomID,player1,player2,playerNum,moves,isAgainGame,player1_name,player2_name)
     emit('room_created', {'player1': player1_name, 'player2': player2_name, 'roomID': roomID, 'state': 0, "pid1":player1,"pid2":player2},broadcast=True)
 
-
-@socketio.on('roomList')
-def roomList():
+def ShowRoomList():
     room_data = []
     userData = GetUsersInfo()
     current = shareData.rooms.head
@@ -108,6 +106,11 @@ def roomList():
             'player2': current.player2_name
         })
         current = current.next
+    return room_data
+@socketio.on('roomList')
+def roomList():
+    room_data = ShowRoomList()
+    
     emit('room_list',room_data)
 
 
@@ -161,10 +164,12 @@ def leaveRoom(data):
     if current.playerNum == '11':
         if player == current.player1:
             current.player1 = ''
+            current.player1_name = ""
             current.playerNum = '1'
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
         elif player == current.player2:
             current.player2 = ''
+            current.player2_name = ""
             current.playerNum = '1'
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
     elif current.playerNum == '1':
@@ -172,12 +177,18 @@ def leaveRoom(data):
             current.player1 = ''
             shareData.rooms.delete_room(roomID)
             print('delete room!')
+            room_data = ShowRoomList()
+            emit('room_list',room_data, broadcast=True)
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+            
         elif player == current.player2:
             current.player2 = ''
             shareData.rooms.delete_room(roomID)
             print('delete room!')
+            room_data = ShowRoomList()
+            emit('room_list',room_data, broadcast=True)
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+            
 
 
 @socketio.on('fallChess')
@@ -298,6 +309,13 @@ def AgainGame(data):
     else:
         emit("AgainGame"+roomID,{"againGame":0, "isAgain":isAgain},broadcast=True)
 
+@socketio.on("message")
+def ReceiveMessage(data):
+    roomID = data["roomID"]
+    userName = data["userName"]
+    msg = data["msg"]
+    print(data)
+    emit("ClientReceiveMsg"+roomID,{"roomID":roomID,"userName":userName,"msg":msg,"code":1},broadcast=True)
 
 if __name__ == '__main__':
     socketio.run(app,port=5000)

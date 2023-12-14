@@ -60,7 +60,7 @@ function handleCellClick(event) {
     if (player == 1) {
 
         boardData[row][col] = 1
-        
+
     } else if (player == 2) {
 
         boardData[row][col] = 2
@@ -238,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // BackUrl LocalUrl
     socketio = io(LocalUrl);
     socketio.emit("joinRoom", data)
+    
     socketio.on("joinRoom_success" + roomID, (res) => {
         console.log(res)
         if (userID == res.player1) {
@@ -313,6 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
             IsRepentance()
             SubscriptPeace()
             SubscriptAdmitDefeat()
+            ClientReceiveMsg()
         } else {
             isStart = false
             document.getElementById('boardPad').innerHTML = "<h1>等待中，未开始</h1>";
@@ -379,7 +381,7 @@ function CreateAgainBox(contentText) {
 }
 
 //生成提示框
-function CreateMessageBox(contentText, isShowBut,defFunction) {
+function CreateMessageBox(contentText, isShowBut, defFunction) {
 
     var main = document.getElementById("main")
     var messageBox = document.createElement("div")
@@ -647,7 +649,7 @@ function addClick() {
     document.getElementById("peace").addEventListener("click", peace)
     document.getElementById("admitDefeat").addEventListener("click", admitDefeat)
     document.getElementById("exitRoom").addEventListener("click", exitRoom)
-    document.getElementById("sendBut").addEventListener("click",sendMessage)
+    document.getElementById("sendBut").addEventListener("click", sendMessage)
 }
 
 function exitRoom() {
@@ -659,14 +661,14 @@ function isExitRoom(e) {
     var isExitRoom = e.target.dataset.isaccept;
     if (isExitRoom == "1") {
         var data = {
-            roomID,
-            userID
+            roomID:roomID,
+            userID:userID
         }
         console.log("111")
 
         socketio.emit("leaveRoom", data)
-        window.location.href = "/roomList?userID="+userID
-    }else{
+        window.location.href = "/roomList?userID=" + userID
+    } else {
         document.getElementById("messageBox").remove()
     }
 
@@ -691,19 +693,52 @@ function PlayMusic(musicType) {
 }
 
 // 聊天弹幕
-function sendMessage()
-{
+function sendMessage() {
     var text = document.getElementById("input").value
-    var subtitleBox = document.createElement("div")
-    subtitleBox.classList.add("subtitle")
-    subtitleBox.innerHTML = "<span>"+text+"</span>"
-    subtitleBox.addEventListener('animationend', function(e) {
-        e.target.remove();
-      });
-    document.getElementById("main").appendChild(subtitleBox)
+
+    data = {
+        roomID:roomID,
+        userName:userName,
+        msg:text
+    }
+
+    socketio.emit("message",data)
+
+    document.getElementById("input").value = ""
 }
+function ClientReceiveMsg() {
+    
+    socketio.on("ClientReceiveMsg" + roomID, res => {
+        console.log(res)
+        if (res.code == 1) {
+            msg = res.msg
+            var subtitleBox = document.createElement("div")
+            subtitleBox.classList.add("subtitle")
+            subtitleBox.innerHTML = "<span>" + msg + "</span>"
+            subtitleBox.addEventListener('animationend', function (e) {
+                e.target.remove();
+            });
+            document.getElementById("main").appendChild(subtitleBox)
 
+            var chatLog = document.getElementById("chatLog")
 
+            var chat_username = document.createElement("div")
+            chat_username.classList.add("chat_username")
+            chat_username.innerText = res.userName + ":"
+            var chat_content = document.createElement("div")
+            chat_content.classList.add("chat_content")
+            chat_content.innerText = msg
+            var oneChat = document.createElement("div")
+            oneChat.classList.add("oneChat")
+            oneChat.appendChild(chat_username)
+            oneChat.appendChild(chat_content)
+
+            chatLog.appendChild(oneChat)
+        }
+        
+    })
+}
+        
 addClick()
 InitBoard()
 RenderBoard()
