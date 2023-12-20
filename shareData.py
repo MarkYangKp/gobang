@@ -75,12 +75,7 @@ class RoomList:
 rooms = RoomList()
 
 
-data = [
-    
-]
+clients = {
 
-isAgainGame = {
-    # "roomid":[
-    #     player1,player2
-    # ]
 }
+

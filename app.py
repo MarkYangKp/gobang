@@ -87,6 +87,10 @@ def newRoom(data):
     player1_name = data['userName']
     player2_name = ''
     roomID = str(random.randint(100000, 999999))
+    client_id = request.sid
+    print(client_id)
+    shareData.clients[client_id] = player1+roomID
+    print(shareData.clients)
     shareData.rooms.add_room(roomID,player1,player2,playerNum,moves,isAgainGame,player1_name,player2_name)
     emit('room_created', {'player1': player1_name, 'player2': player2_name, 'roomID': roomID, 'state': 0, "pid1":player1,"pid2":player2},broadcast=True)
 
@@ -124,6 +128,9 @@ def joinRoom(data):
     if current is not None:
         if current.playerNum == '':
             current.playerNum += '1'
+            client_id = request.sid
+            shareData.clients[client_id] = player+roomID
+            print(shareData.clients)
             # 新建房间时已进行player1的赋值
             # 根据userID获取玩家名字
             for user in userData:
@@ -134,6 +141,9 @@ def joinRoom(data):
             emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
         elif current.playerNum == '1':
             if player != current.player1:
+                client_id = request.sid
+                shareData.clients[client_id] = player+roomID
+                print(shareData.clients)
                 current.player2 = player
                 current.playerNum += '1'
                 for user in userData:
@@ -163,8 +173,6 @@ def leaveRoom(data):
     roomID = data['roomID']
     player = data['userID']
     current = shareData.rooms.get_room(roomID)
-    print(current.playerNum+'66666666666666666')
-    print(player)
     if current.playerNum == '11':
         if player == current.player1:
             current.player1 = ''
@@ -196,7 +204,59 @@ def leaveRoom(data):
             room_data = ShowRoomList()
             emit('room_list',room_data, broadcast=True)
             emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+
+
+def leaveRoom(data):
+    roomID = data['roomID']
+    player = data['userID']
+    current = shareData.rooms.get_room(roomID)
+    if current.playerNum == '11':
+        if player == current.player1:
+            current.player1 = ''
+            current.player1_name = ""
+            current.playerNum = '1'
+            userNames = ["",current.player2_name]
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+            emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
+        elif player == current.player2:
+            current.player2 = ''
+            current.player2_name = ""
+            current.playerNum = '1'
+            userNames=[current.player1_name,""]
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+            emit('userList'+roomID, {'player1': player, 'player2': '', 'room': roomID, 'state': 0, 'userNames':userNames}, broadcast=True)
+    elif current.playerNum == '1':
+        if player == current.player1:
+            current.player1 = ''
+            shareData.rooms.delete_room(roomID)
+            print('delete room!')
+            room_data = ShowRoomList()
+            emit('room_list',room_data, broadcast=True)
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
             
+        elif player == current.player2:
+            current.player2 = ''
+            shareData.rooms.delete_room(roomID)
+            print('delete room!')
+            room_data = ShowRoomList()
+            emit('room_list',room_data, broadcast=True)
+            emit('leaveRoom_success'+roomID, {'room': roomID, 'player': player}, broadcast=True)
+
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    cilent_id = request.sid
+    print(cilent_id)
+    id = shareData.clients.get(cilent_id)
+    if id:
+        data={
+            'roomID':id[6:],
+            'userID':id[:6]
+        }
+        leaveRoom(data)
+        print('执行')
+    else:
+        print('Can not find!')
 
 
 @socketio.on('fallChess')
@@ -322,6 +382,7 @@ def ReceiveMessage(data):
     roomID = data["roomID"]
     userName = data["userName"]
     msg = data["msg"]
+    
     print(data)
     emit("ClientReceiveMsg"+roomID,{"roomID":roomID,"userName":userName,"msg":msg,"code":1},broadcast=True)
 
