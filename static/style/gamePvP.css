@@ -131,6 +131,7 @@ body {
 .tipBut {
     width: 40px;
     height: 15px;
+    background-color: #18BC9C;
     box-shadow: 0 0 6px rgba(0, 0, 0.5);
     margin: 10px;
     padding: 10px;
@@ -139,6 +140,7 @@ body {
 }
 
 .tipBut:active {
+    background-color: #18BC9C;
     width: 40px;
     height: 15px;
     box-shadow: 0 0 1px rgba(0, 0, 0.5);
@@ -210,6 +212,7 @@ body {
     align-items: center;
     width: 50px;
     height: 30px;
+    background-color: #18BC9C;
     box-shadow: 0 0 5px rgba(0, 0, 0.5);
 }
 
@@ -257,6 +260,7 @@ body {
     align-items: center;
     width: 70px;
     height: 50px;
+    background-color: #18BC9C;
     box-shadow: 0 0 5px rgba(0, 0, 0.5);
 }
 
@@ -279,10 +283,13 @@ body {
     /* 居中显示 */
     white-space: nowrap;
     /* 防止文本换行 */
-    background-color: #f00;
+    background-color: #18BC9C;
     /* 弹幕背景颜色 */
     padding: 5px 10px;
     color: #fff;
+    font-size: 45px;
+    font-weight: bold;
+
     /* 弹幕文字颜色 */
     animation: moveLeft 20s linear forwards;
     /* 使用动画效果，5秒内从右到左 */
