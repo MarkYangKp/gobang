@@ -147,6 +147,10 @@ function addClick() {
     index.addEventListener("click", function () {
         window.location.href = "/";
     })
+    const aboutp = document.getElementById("aboutPage")
+    aboutp.addEventListener("click", function () {
+        window.location.href = "/about";
+    })
 }
 addClick()
 

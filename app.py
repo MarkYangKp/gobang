@@ -21,8 +21,12 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 def index():
     data = GetUsersInfo()
     
-        
     return render_template("index.html",rankData=data)
+
+@app.route("/about",methods=['GET'])
+def about():
+    return render_template("about.html")
+
 @app.route("/GetRank",methods=['GET', 'POST'])
 def GetRank():
     data = GetUsersInfo()

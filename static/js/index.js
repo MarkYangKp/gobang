@@ -258,4 +258,15 @@ function errorUserName() {
             console.error('There has been a problem with your fetch operation:', error);
         });
 }
+function addClick() {
+    const index = document.getElementById("indexPage")
+    index.addEventListener("click", function () {
+        window.location.href = "/";
+    })
+    const aboutp = document.getElementById("aboutPage")
+    aboutp.addEventListener("click", function () {
+        window.location.href = "/about";
+    })
+}
+addClick()
 GetUserID()

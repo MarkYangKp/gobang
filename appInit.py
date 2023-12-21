@@ -13,7 +13,6 @@ def bubble_sort(data):
     with open("userData.json", 'w',encoding="utf8") as file: 
         file.write( json.dumps(data))
     # return data
-
 def GetUsersInfo():
     # 读取JSON文件
     with open("userData.json", 'r',encoding="utf8") as file:
