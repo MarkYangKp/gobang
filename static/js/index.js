@@ -1,6 +1,7 @@
 const www = 'http://115.159.211.13:5000'
 const LocalUrl = "http://127.0.0.1:5000"
 const LocalServer1 = "http://10.1.1.99:5000"
+//请求地址
 const LocalServer = www
 document.addEventListener('DOMContentLoaded', function () {
     const userName = IsSetName()
