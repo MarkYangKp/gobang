@@ -9,8 +9,8 @@
 pip install -r requirements.txt
 ```
 
-然后运行app.py程序，程序默认在http://localhost:5000运行，注意防火墙设置
+然后运行app.py程序，程序默认在http://localhost:5000 运行，注意防火墙设置
 
-然后打开浏览器进入http://localhost:5000即可查看网页运行
+然后打开浏览器进入http://localhost:5000 即可查看网页运行
 
 **注意：** 如果要在服务器上测试，请把``` /static/index.js ```、 ``` /static/roomList.js ``` 、``` /static/gamePVP.js ``` 这几个文件里面的请求地址换成你的服务器公网IP。（在各js文件的开头标注了，gamePVP.js 在第239行）
